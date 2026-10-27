@@ -68,7 +68,7 @@ h1 b { color: var(--primary); font-family: var(--num); font-size: 42px; padding:
 
 /* 顶栏 */
 .topbar { display: flex; align-items: center; gap: 12px; min-height: 40px; }
-.back { font-weight: 700; color: var(--primary-d); padding: 6px 10px 6px 0; white-space: nowrap; }
+.back { font-weight: 700; color: var(--primary-d); padding: 6px 10px 6px 0; white-space: nowrap; text-decoration: none; }
 .ttl { font-weight: 700; font-size: 18px; }
 .dots { display: flex; gap: 8px; margin-left: auto; }
 .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--card); border: 2px solid var(--line); }

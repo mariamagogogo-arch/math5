@@ -515,7 +515,7 @@ function renderHome() {
   }).join('');
   var btn = nDone === 0 ? '开始今天的 5 题' : nDone < 5 ? '继续做题（已做 ' + nDone + '/5）' : '查看今天的成绩';
   var wbN = Object.keys(S.wb).length;
-  return '<header class="hello"><div class="date">' + (dt.getMonth() + 1) + '月' + dt.getDate() + '日 星期' + WEEK[dt.getDay()] + '</div>' +
+  return '<div class="topbar"><a class="back" href="../">‹ 学习首页</a></div><header class="hello"><div class="date">' + (dt.getMonth() + 1) + '月' + dt.getDate() + '日 星期' + WEEK[dt.getDay()] + '</div>' +
     '<h1>每日<b>5</b>题</h1><p class="sub">五年级上册 · 计算不粗心</p></header>' +
     '<section class="card today"><ul class="slots">' + rows + '</ul>' +
     '<button class="btn primary" data-act="start">' + btn + '</button>' +
