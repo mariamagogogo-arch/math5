@@ -522,6 +522,8 @@ function renderHome() {
     (nDone === 5 ? '<p class="doneline">今天完成啦！一次做对 ' + n1 + ' 题</p>' : '') + '</section>' +
     '<section class="tiles"><div class="tile"><b>' + streak(TODAY) + '</b><span>连续打卡（天）</span></div>' +
     '<div class="tile"><b>' + wbN + '</b><span>错题本里的题型</span></div></section>' +
+    '<a class="btn ghost" href="zimu.html" style="text-align:center;text-decoration:none">用字母表示数 · 先弄懂再练</a>' +
+    '<a class="btn ghost" href="guoguan.html" style="text-align:center;text-decoration:none">计算过关练习 1–8 · 步骤与规律</a>' +
     '<button class="btn ghost" data-act="stats">学习统计 · 家长查看</button>' +
     '<p class="motto">每天 5 道，慢一点、算仔细，比做得快更重要。</p>';
 }

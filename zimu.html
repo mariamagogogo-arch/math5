@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#eef6f3">
+<title>用字母表示数 · 五上数学</title>
+<style>
+/* 和"每日5题"同一套配色：薄荷绿 + 阳光黄；字母用紫色，让孩子一眼看出"藏起来的数" */
+:root{
+  --bg:#eef6f3; --card:#fff; --ink:#1f2d3a; --muted:#526273; --line:#d8e6e1; --soft:#f4f9f7;
+  --primary:#0f9d86; --primary-d:#0b7b69; --sun:#ffbf2f; --sun-bg:#fff6dc; --red:#e5533d; --red-bg:#fdeeeb; --ok-bg:#e2f5ef;
+  --letter:#6b4fd8; --letter-bg:#efeaff;
+  --f:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --num:"DIN Alternate","Roboto",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:var(--f);font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.wrap{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:14px;
+  padding-top:max(12px,env(safe-area-inset-top,0px));padding-bottom:48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.topbar{display:flex;align-items:center;min-height:36px;gap:8px}
+.back{font-weight:700;color:var(--primary-d);text-decoration:none;padding:4px 10px 4px 0}
+h1{margin:0;font-size:28px;line-height:1.25}
+h1 b{color:var(--letter)}
+h2{font-size:19px;margin:0;line-height:1.35}
+h3{font-size:16px;margin:0}
+p{margin:0}
+.sub{color:var(--muted);font-size:15px}
+.card{background:var(--card);border-radius:16px;padding:16px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.L{color:var(--letter);font-weight:800;font-style:italic;font-family:Georgia,"Times New Roman",serif;padding:0 1px}
+.box{display:inline-block;min-width:1.4em;height:1.3em;border:2px dashed var(--letter);border-radius:5px;vertical-align:-0.2em;background:var(--letter-bg)}
+.eq{font:700 22px/1.5 var(--num);text-align:center;background:var(--soft);border-radius:12px;padding:10px;overflow-wrap:anywhere}
+.btn{display:block;width:100%;min-height:50px;border-radius:14px;font-size:17px;font-weight:700;padding:10px 16px;text-align:center;text-decoration:none}
+.btn.primary{background:var(--primary);color:#fff;box-shadow:0 4px 0 var(--primary-d)}
+.btn.primary:active{transform:translateY(3px);box-shadow:0 1px 0 var(--primary-d)}
+.btn.ghost{background:var(--card);border:2px solid var(--line);color:var(--primary-d)}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tip{background:var(--sun-bg);border-radius:12px;padding:10px 12px;font-size:15px}
+/* 首页模块卡 */
+.mod{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--card);border-radius:16px;padding:14px;text-align:left;width:100%;border:2px solid transparent}
+.mod .ic{width:52px;height:52px;border-radius:14px;background:var(--letter-bg);display:grid;place-items:center;font:800 italic 24px Georgia,serif;color:var(--letter)}
+.mod b{display:block;font-size:17px}
+.mod small{color:var(--muted);font-size:14px;line-height:1.4;display:block}
+.badge{font-size:13px;font-weight:700;border-radius:999px;padding:2px 10px;white-space:nowrap;background:var(--soft);color:var(--muted)}
+.badge.done{background:var(--ok-bg);color:var(--primary-d)}
+.badge.due{background:var(--sun-bg);color:#9a6a00}
+/* 阶段条 */
+.stages{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.stg{text-align:center;font-size:12px;font-weight:700;color:var(--muted);padding:6px 0 4px;border-bottom:4px solid var(--line)}
+.stg.on{color:var(--primary-d);border-color:var(--primary)}
+.stg.past{color:var(--primary-d);border-color:#9fd9cc}
+/* 想一想卡片 */
+.lc .k{font-size:13px;font-weight:700;color:var(--letter);letter-spacing:.06em}
+.lc h2{font-size:21px}
+.lc .body{display:flex;flex-direction:column;gap:10px;font-size:16.5px}
+.rule-t{width:100%;border-collapse:collapse;font-size:16px}
+.rule-t td{border-bottom:1px dashed var(--line);padding:6px 4px;text-align:center}
+.rule-t td:first-child{font-weight:700}
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--primary)}
+/* 天平 */
+.bal{display:flex;flex-direction:column;align-items:center;gap:10px}
+.bal svg{width:100%;max-width:340px;height:auto}
+#beam{transition:transform .5s ease;transform-origin:170px 60px}
+.bal .msg{min-height:1.6em;font-weight:700;text-align:center}
+.minis{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.mini{border:2px solid var(--line);border-radius:12px;padding:8px;font-weight:700;background:var(--soft)}
+.mini.ok{border-color:var(--primary);background:var(--ok-bg)}
+.mini.no{border-color:var(--red);background:var(--red-bg)}
+/* 例题 */
+.wk{display:flex;flex-direction:column;gap:8px}
+.wk .s{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start;background:var(--soft);border-radius:12px;padding:10px}
+.wk .s .n{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font:700 13px var(--num)}
+.wk .s .m{font:700 18px var(--num);overflow-wrap:anywhere}
+.wk .s p{font-size:15px;color:var(--muted)}
+/* 题目与步骤 */
+.qbox{background:var(--letter-bg);border-radius:14px;padding:12px 14px;font-size:17px;font-weight:600}
+.qbox .eq{background:#fff;margin-top:6px}
+.pic{background:#fff;border-radius:12px;padding:6px;display:flex;gap:4px;overflow-x:auto;align-items:flex-end}
+.pic figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:2px;flex:0 0 auto}
+.pic figcaption{font:700 12px var(--num);color:var(--muted)}
+.steps{display:flex;flex-direction:column;gap:10px}
+.st{border-left:4px solid var(--line);padding:2px 0 2px 12px;display:flex;flex-direction:column;gap:8px}
+.st.cur{border-color:var(--sun)}
+.st.ok{border-color:var(--primary)}
+.st .p{font-weight:700}
+.st .p small{display:block;font-weight:500;color:var(--muted);font-size:14px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{border:2px solid var(--line);border-radius:12px;padding:10px 8px;font:700 16px var(--num);background:var(--soft);min-height:48px}
+.opt.ok{border-color:var(--primary);background:var(--ok-bg);color:var(--primary-d)}
+.opt.no{border-color:var(--red);background:var(--red-bg);color:var(--red);text-decoration:line-through}
+.opt:disabled{cursor:default}
+.inrow{display:flex;gap:8px;align-items:center}
+.inrow .pre{font:700 18px var(--num);white-space:nowrap}
+.inrow input{flex:1;min-width:0;min-height:48px;border-radius:12px;border:2px solid var(--line);background:var(--soft);font:700 20px var(--num);text-align:center;color:var(--ink)}
+.inrow input:focus{border-color:var(--primary);background:#fff;outline:none}
+.inrow .go{background:var(--primary);color:#fff;font-weight:700;border-radius:12px;padding:0 16px;min-height:48px;white-space:nowrap}
+.fb{font-size:15px;font-weight:700}
+.fb.ok{color:var(--primary-d)}
+.fb.no{color:var(--red)}
+.fb.hint{color:#8a5a00;background:var(--sun-bg);border-radius:10px;padding:6px 10px;font-weight:600}
+.sol{background:var(--ok-bg);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:15.5px}
+.sol b{color:var(--primary-d)}
+.sol .m{font:700 16px var(--num)}
+.prog{font:700 14px var(--num);color:var(--muted)}
+.score{display:flex;align-items:center;gap:14px}
+.score b{font:800 40px/1 var(--num);color:var(--primary-d)}
+.say{display:flex;flex-direction:column;gap:8px}
+.say .qq{background:var(--letter-bg);border-radius:12px;padding:10px 12px;font-weight:700}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:15.5px;padding:6px 0}
+.chk input{width:22px;height:22px;flex:0 0 auto;margin-top:2px;accent-color:var(--primary)}
+.toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:12px;padding:10px 16px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1}
+@media (max-width:400px){.opts{grid-template-columns:1fr}.eq{font-size:20px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap" id="app"></main>
+<div class="toast" id="toast" role="status"></div>
+<script>
+'use strict';
+/* ================= 工具 ================= */
+function r6(x){return Math.round(x*1e6)/1e6}
+function f(x){return String(r6(x))}
+function ri(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function d1(a,b){return ri(a*10,b*10)/10}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function L(x){return '<span class="L">'+x+'</span>'}
+function today(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function daysSince(s){if(!s)return 999;var p=s.split('-');var d=new Date(+p[0],+p[1]-1,+p[2]);var n=new Date();n.setHours(0,0,0,0);return Math.round((n-d)/864e5)}
+function parseIn(s){s=String(s||'').replace(/\s/g,'').replace(/[。．]/g,'.').replace(/[－—]/g,'-');if(!/^-?\d*\.?\d+$/.test(s))return null;return parseFloat(s)}
+function toast(t){var e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){e.classList.remove('on')},2000)}
+function esc(s){return String(s).replace(/"/g,'&quot;')}
+
+/* ================= 题目生成 =================
+   每道题：{q:题目HTML, pic:图, steps:[{k:'c'选择|'n'填数, p:提示, o:选项, a:答案, h:错了的提示}], ans:最终答案, ansLabel, sol:[讲解]} */
+var LET=['x','a','b','y','m'];
+function opt4(correct,others){var o=shuffle([correct].concat(others));return {o:o,a:o.indexOf(correct)}}
+function chooseStep(p,correct,others,h){var r=opt4(correct,others);return {k:'c',p:p,o:r.o,a:r.a,h:h}}
+var G={
+/* ---- 方程 ---- */
+e_add:function(P){P=P||{};var l=P.l||pick(LET),x=P.x||d1(1,20),p=P.p||d1(1,15),s=r6(x+p);
+  return {q:P.q||'解方程：', eq:L(l)+' + '+p+' = '+s, steps:[
+    chooseStep(L(l)+' 身边有「+ '+p+'」，要让它走开，等号两边同时……','减去 '+p,['加上 '+p,'乘 '+p,'除以 '+p],'「+」的相反运算是「−」。两边都减去 '+p+'，天平才平。'),
+    {k:'n',p:'两边同时减去 '+p+'：',pre:L(l)+' = ',a:x,h:s+' − '+p+' = ?'}],
+    ans:x,ansPre:L(l)+' = ',sol:[L(l)+' + '+p+' = '+s,'两边同时减去 '+p,L(l)+' = '+s+' − '+p,L(l)+' = <b>'+f(x)+'</b>','检验：'+f(x)+' + '+p+' = '+s+' ✓']}},
+e_sub:function(P){P=P||{};var l=P.l||pick(LET),x=P.x||d1(10,40),p=P.p||d1(1,9),s=r6(x-p);
+  var eq=P.eq||(L(l)+' − '+p+' = '+s);
+  return {q:P.q||'解方程：', eq:eq, steps:(P.pre||[]).concat([
+    chooseStep(L(l)+' 身边有「− '+p+'」，要让它走开，等号两边同时……','加上 '+p,['减去 '+p,'乘 '+p,'除以 '+p],'「−」的相反运算是「+」。两边都加上 '+p+'。'),
+    {k:'n',p:'两边同时加上 '+p+'：',pre:L(l)+' = ',a:x,h:s+' + '+p+' = ?'}]),
+    ans:x,ansPre:L(l)+' = ',sol:[L(l)+' − '+p+' = '+s,'两边同时加上 '+p,L(l)+' = '+s+' + '+p,L(l)+' = <b>'+f(x)+'</b>','检验：'+f(x)+' − '+p+' = '+s+' ✓']}},
+e_mul:function(P){P=P||{};var l=P.l||pick(LET),k=P.k||ri(2,9),x=P.x||d1(1,9),s=r6(k*x);
+  return {q:P.q||'解方程（'+k+L(l)+' 就是 '+k+'×'+L(l)+'）：', eq:k+L(l)+' = '+s, steps:[
+    chooseStep(L(l)+' 被「'+k+'×」粘住了，要让它走开，等号两边同时……','除以 '+k,['减去 '+k,'乘 '+k,'加上 '+k],'「×」的相反运算是「÷」。'+k+L(l)+' 是 '+k+' 乘 '+L(l)+'，所以两边除以 '+k+'。'),
+    {k:'n',p:'两边同时除以 '+k+'：',pre:L(l)+' = ',a:x,h:s+' ÷ '+k+' = ?'}],
+    ans:x,ansPre:L(l)+' = ',sol:[k+L(l)+' = '+s,'两边同时除以 '+k,L(l)+' = '+s+' ÷ '+k,L(l)+' = <b>'+f(x)+'</b>','检验：'+k+'×'+f(x)+' = '+s+' ✓']}},
+e_div:function(P){P=P||{};var l=P.l||pick(LET),k=P.k||pick([2,3,4,5,2.5,3.5,1.5]),s=P.s||d1(1,6),x=r6(k*s);
+  var eq=P.eq||(L(l)+' ÷ '+k+' = '+s);
+  return {q:P.q||'解方程：', eq:eq, steps:(P.pre||[]).concat([
+    chooseStep(L(l)+' 后面跟着「÷ '+k+'」，要让它走开，等号两边同时……','乘 '+k,['除以 '+k,'加上 '+k,'减去 '+k],'「÷」的相反运算是「×」。两边都乘 '+k+'。'),
+    {k:'n',p:'两边同时乘 '+k+'：',pre:L(l)+' = ',a:x,h:s+' × '+k+' = ?'}]),
+    ans:x,ansPre:L(l)+' = ',sol:[L(l)+' ÷ '+k+' = '+s,'两边同时乘 '+k,L(l)+' = '+s+' × '+k,L(l)+' = <b>'+f(x)+'</b>','检验：'+f(x)+' ÷ '+k+' = '+s+' ✓']}},
+e_two:function(P){P=P||{};var l=P.l||pick(LET),k=P.k||ri(2,9),x=P.x||ri(2,20),c=P.c||ri(5,60),s=k*x-c;
+  if(s<=0)return G.e_two(P);
+  return {q:P.q||'解方程（两步）：', eq:k+L(l)+' − '+c+' = '+s, steps:(P.pre||[]).concat([
+    chooseStep('先让离 '+L(l)+' 远的「− '+c+'」走开（最后穿上的衣服最先脱），两边同时……','加上 '+c,['减去 '+c,'除以 '+k,'乘 '+k],'先处理外面的「− '+c+'」，它的相反运算是「+ '+c+'」。'),
+    {k:'n',p:'两边同时加上 '+c+'：',pre:k+L(l)+' = ',a:k*x,h:s+' + '+c+' = ?'},
+    chooseStep('现在 '+L(l)+' 只被「'+k+'×」粘住了，两边同时……','除以 '+k,['乘 '+k,'减去 '+k,'加上 '+k],k+L(l)+' 是 '+k+' 乘 '+L(l)+'，用「÷」让它走开。'),
+    {k:'n',p:'两边同时除以 '+k+'：',pre:L(l)+' = ',a:x,h:(k*x)+' ÷ '+k+' = ?'}]),
+    ans:x,ansPre:L(l)+' = ',sol:[k+L(l)+' − '+c+' = '+s,'① 两边同时加上 '+c+'：'+k+L(l)+' = '+(k*x),'② 两边同时除以 '+k+'：'+L(l)+' = <b>'+x+'</b>','检验：'+k+'×'+x+' − '+c+' = '+s+' ✓']}},
+e_sub2:function(P){P=P||{};var l='b',k=P.k||ri(3,9),j=P.j||ri(2,6),A=P.A||ri(5,20),x=P.x||ri(5,25),M=k*x-j*A;
+  if(M<=0)return G.e_sub2(P);
+  var g=G.e_two({l:l,k:k,x:x,c:j*A,pre:[{k:'n',p:'第一步：先把 '+L('a')+' = '+A+' 代进去。'+j+L('a')+' 就是 '+j+'×'+A+' =',pre:'',a:j*A,h:j+' × '+A+' = ?'}]});
+  g.q='如果 '+k+L('b')+' − '+j+L('a')+' = '+L('m')+'，当 '+L('m')+' = '+M+'，'+L('a')+' = '+A+' 时，'+L('b')+' 等于多少？';
+  g.eq=k+L('b')+' − '+j+'×'+A+' = '+M;
+  g.sol=['代入：'+k+L('b')+' − '+j+'×'+A+' = '+M,k+L('b')+' − '+(j*A)+' = '+M,'两边同时加上 '+(j*A)+'：'+k+L('b')+' = '+(M+j*A),'两边同时除以 '+k+'：'+L('b')+' = <b>'+x+'</b>'];
+  return g},
+e_bra:function(P){P=P||{};var l=P.l||pick(['a','x']),x=P.x||ri(2,9),k=P.k||ri(2,6),d=P.d||ri(2,8),e=P.e||ri(1,5),c=d*e+k*x;
+  return {q:P.q||'解方程（括号题）：', eq:'('+c+' − '+k+L(l)+') ÷ '+d+' = '+e, steps:[
+    chooseStep('最外面是「÷ '+d+'」，先让它走开，两边同时……','乘 '+d,['除以 '+d,'减去 '+d,'加上 '+d],'整个括号被「÷ '+d+'」，相反运算是「× '+d+'」。'),
+    {k:'n',p:'两边同时乘 '+d+'：',pre:c+' − '+k+L(l)+' = ',a:d*e,h:e+' × '+d+' = ?'},
+    chooseStep(c+' − '+k+L(l)+' = '+(d*e)+' 里，'+k+L(l)+' 是减数。减数 = ……',c+' − '+(d*e),[c+' + '+(d*e),(d*e)+' − '+c,c+' × '+(d*e)],'想一想：10 − □ = 3，□ = 10 − 3。减数 = 被减数 − 差。'),
+    {k:'n',p:'算一算：',pre:k+L(l)+' = ',a:c-d*e,h:c+' − '+(d*e)+' = ?'},
+    {k:'n',p:'两边同时除以 '+k+'：',pre:L(l)+' = ',a:x,h:(c-d*e)+' ÷ '+k+' = ?'}],
+    ans:x,ansPre:L(l)+' = ',sol:['('+c+' − '+k+L(l)+') ÷ '+d+' = '+e,'① 两边乘 '+d+'：'+c+' − '+k+L(l)+' = '+(d*e),'② 减数 = 被减数 − 差：'+k+L(l)+' = '+c+' − '+(d*e)+' = '+(c-d*e),'③ 两边除以 '+k+'：'+L(l)+' = <b>'+x+'</b>','检验：('+c+' − '+k+'×'+x+') ÷ '+d+' = '+e+' ✓']}},
+/* ---- 代入求值 ---- */
+s_kxy:function(P){P=P||{};var k=P.k||pick([0.2,0.4,0.5,0.6,0.8,1.5,2.5]),x=P.x||ri(1,9),y=P.y||ri(1,9),v=r6(k*(x+y));
+  return {q:'当 '+L('x')+' = '+x+'，'+L('y')+' = '+y+' 时，求 '+k+'('+L('x')+' + '+L('y')+') 的值。', steps:[
+    chooseStep('第一步：把省略的乘号写回来，这个式子其实是……',k+' × ('+L('x')+' + '+L('y')+')',[k+' + ('+L('x')+' + '+L('y')+')',k+L('x')+' + '+L('y'),k+' × '+L('x')+' + '+L('y')],'数和括号挨在一起，中间藏着「×」，而且括号要整个保留。'),
+    {k:'n',p:'第二步：代入，先算括号里：',pre:'('+x+' + '+y+') = ',a:x+y,h:x+' + '+y+' = ?'},
+    {k:'n',p:'第三步：再乘 '+k+'：',pre:k+' × '+(x+y)+' = ',a:v,h:'小数乘法：先按整数乘，再数小数位数。'}],
+    ans:v,ansPre:'结果 = ',sol:[k+'('+L('x')+'+'+L('y')+') = '+k+' × ('+x+' + '+y+')','= '+k+' × '+(x+y),'= <b>'+f(v)+'</b>']}},
+s_abkb:function(P){P=P||{};var c=P.c||pick([2.5,1.5,3.5,0.5]),a=P.a||r6(c+ri(1,6)),b=P.b||d1(1,5),v=r6(a*b-c*b);
+  return {q:'当 '+L('a')+' = '+a+'，'+L('b')+' = '+b+' 时，求 '+L('a')+L('b')+' − '+c+L('b')+' 的值。', steps:[
+    chooseStep('第一步：把省略的乘号写回来，这个式子其实是……',L('a')+' × '+L('b')+' − '+c+' × '+L('b'),[L('a')+' + '+L('b')+' − '+c+' + '+L('b'),'把 '+a+' 和 '+b+' 连起来写',L('a')+' × '+L('b')+' − '+c+' + '+L('b')],'字母和字母、数和字母挨在一起，中间都藏着「×」。'),
+    {k:'n',p:'第二步：代入，先算第一个乘法：',pre:a+' × '+b+' = ',a:r6(a*b),h:'先按整数乘，再数小数位数。'},
+    {k:'n',p:'再算第二个乘法：',pre:c+' × '+b+' = ',a:r6(c*b),h:'先按整数乘，再数小数位数。'},
+    {k:'n',p:'第三步：最后算减法：',pre:f(a*b)+' − '+f(c*b)+' = ',a:v,h:'小数点对齐再减。'}],
+    ans:v,ansPre:'结果 = ',sol:[a+' × '+b+' − '+c+' × '+b,'= '+f(a*b)+' − '+f(c*b),'= <b>'+f(v)+'</b>','💡 聪明做法：两个乘法都有 '+b+'，可以用分配律：('+a+' − '+c+') × '+b+' = '+f(a-c)+' × '+b+' = '+f(v)]}},
+s_mmn:function(P){P=P||{};var m=P.m||ri(5,15),n=P.n||ri(2,m-1),v=m*m-m*n-n;
+  return {q:'当 '+L('m')+' = '+m+'，'+L('n')+' = '+n+' 时，求 '+L('m')+'² − '+L('m')+L('n')+' − '+L('n')+' 的值。', steps:[
+    chooseStep('第一步：把式子写完整。'+L('m')+'² 是什么意思？',L('m')+' × '+L('m'),[L('m')+' × 2',L('m')+' + '+L('m'),L('m')+' + 2'],'小2写在右上角叫「平方」，是两个 '+L('m')+' 相乘，不是乘2！'),
+    {k:'n',p:'第二步：代入算平方：',pre:m+' × '+m+' = ',a:m*m,h:m+' × '+m+' = ?'},
+    {k:'n',p:L('m')+L('n')+' 就是 '+L('m')+' × '+L('n')+'：',pre:m+' × '+n+' = ',a:m*n,h:m+' × '+n+' = ?'},
+    {k:'n',p:'第三步：从左往右算减法：',pre:(m*m)+' − '+(m*n)+' − '+n+' = ',a:v,h:'先算 '+(m*m)+' − '+(m*n)+'，再减 '+n+'。'}],
+    ans:v,ansPre:'结果 = ',sol:[m+' × '+m+' − '+m+' × '+n+' − '+n,'= '+(m*m)+' − '+(m*n)+' − '+n,'= <b>'+v+'</b>']}},
+s_e2d:function(P){P=P||{};var e=P.e||d1(1.1,5.9),d=P.d||d1(1,3),k=P.k||2,v=r6(e*e-k*d);
+  if(v<=0)return G.s_e2d(P);
+  return {q:'当 '+L('e')+' = '+e+'，'+L('d')+' = '+d+' 时，求 '+L('e')+'² − '+k+L('d')+' 的值。', steps:[
+    chooseStep('第一步：把式子写完整，这个式子其实是……',L('e')+' × '+L('e')+' − '+k+' × '+L('d'),[L('e')+' × 2 − '+k+' × '+L('d'),L('e')+' × '+L('e')+' − '+k+' + '+L('d'),L('e')+' + '+L('e')+' − '+k+L('d')],L('e')+'² 是 '+L('e')+'×'+L('e')+'；'+k+L('d')+' 是 '+k+'×'+L('d')+'。'),
+    {k:'n',p:'第二步：代入算平方：',pre:e+' × '+e+' = ',a:r6(e*e),h:'先算 '+Math.round(e*10)+'×'+Math.round(e*10)+'，再数小数位数（2位）。'},
+    {k:'n',p:'再算：',pre:k+' × '+d+' = ',a:r6(k*d),h:k+' × '+d+' = ?'},
+    {k:'n',p:'第三步：最后减：',pre:f(e*e)+' − '+f(k*d)+' = ',a:v,h:'小数点对齐再减。'}],
+    ans:v,ansPre:'结果 = ',sol:[e+' × '+e+' − '+k+' × '+d,'= '+f(e*e)+' − '+f(k*d),'= <b>'+f(v)+'</b>']}},
+s_ab3:function(P){P=P||{};var p=ri(2,5),q=ri(2,5),a=d1(1,9),b=ri(2,9),v=r6(p*a+q*b);
+  return {q:'当 '+L('a')+' = '+a+'，'+L('b')+' = '+b+' 时，求 '+p+L('a')+' + '+q+L('b')+' 的值。', steps:[
+    chooseStep('第一步：把省略的乘号写回来，这个式子其实是……',p+' × '+L('a')+' + '+q+' × '+L('b'),[p+' + '+L('a')+' + '+q+' + '+L('b'),p+L('a')+' 就是 '+p+' 后面接 '+a,p+' × '+L('a')+' × '+q+' × '+L('b')],'数和字母挨在一起，中间藏着「×」。'),
+    {k:'n',p:'第二步：代入：',pre:p+' × '+a+' = ',a:r6(p*a),h:p+' × '+a+' = ?'},
+    {k:'n',p:'',pre:q+' × '+b+' = ',a:q*b,h:q+' × '+b+' = ?'},
+    {k:'n',p:'第三步：先乘后加：',pre:f(p*a)+' + '+(q*b)+' = ',a:v,h:'把两个积加起来。'}],
+    ans:v,ansPre:'结果 = ',sol:[p+' × '+a+' + '+q+' × '+b,'= '+f(p*a)+' + '+(q*b),'= <b>'+f(v)+'</b>']}},
+/* ---- 找规律 ---- */
+p_chain:function(P){P=P||{};var k=P.k||pick([3,4,5,6]),name={3:'三角形',4:'正方形',5:'五边形',6:'六边形'}[k],d=k-1,cnt=function(n){return d*n+1};
+  var N=P.N||ri(8,15),T=P.T||cnt(ri(16,30));return pat({kind:'chain',k:k,name:name,unit:'根小棒',what:'摆 n 个'+name,d:d,b:1,cnt:cnt,N:N,T:T,ask:P.ask})},
+p_dots:function(P){P=P||{};var arms=P.arms||pick([3,4]),d=arms,cnt=function(n){return arms*(n-1)+1};
+  var N=P.N||ri(7,12),T=P.T||cnt(ri(15,25));return pat({kind:'dots',arms:arms,name:arms===3?'Y形点子图':'十字形点子图',unit:'个点',what:'第 n 幅',d:d,b:1-arms,cnt:cnt,N:N,T:T,ask:P.ask})}
+};
+function fm(d,b){return d+'n'+(b>0?' + '+b:b<0?' − '+(-b):'')}
+function pat(c){
+  var F=fm(c.d,c.b),wrong=[fm(c.d+1,0),fm(c.cnt(1),0),fm(c.d,c.b+1)];
+  if(c.b===0)wrong[2]=fm(c.d,1);
+  var nT=(c.T-c.b)/c.d;
+  var ask=c.ask||pick(['N','T']);
+  var steps=[
+    {k:'n',p:'别急着数大的！先看图，数一数前3个：',pre:'第1个：',a:c.cnt(1),h:'一根一根数，数过的做个记号。'},
+    {k:'n',p:'',pre:'第2个：',a:c.cnt(2),h:'第2个比第1个多了几根？'},
+    {k:'n',p:'',pre:'第3个：',a:c.cnt(3),h:'第3个比第2个又多了几根？'},
+    {k:'n',p:'每多一个，就多几'+c.unit+'？',pre:'每次多：',a:c.d,h:c.cnt(2)+' − '+c.cnt(1)+' = ?'},
+    chooseStep('每次多 '+c.d+'，就是「'+c.d+'×n」。第1个是 '+c.cnt(1)+'，'+c.d+'×1 = '+c.d+'，还要'+(c.b>=0?'补 '+c.b:'减 '+(-c.b))+'。所以第 n 个是……',F,wrong,'用第2个检验：'+c.d+'×2'+(c.b>=0?' + '+c.b:' − '+(-c.b))+' 应该等于 '+c.cnt(2)+'。'),
+    ask==='N'?{k:'n',p:'用式子算第 '+c.N+' 个（把 n 换成 '+c.N+'）：',pre:fm(c.d,c.b).replace('n','×'+c.N)+' = ',a:c.cnt(c.N),h:c.d+' × '+c.N+' 先算，再'+(c.b>=0?'加':'减')+'。'}
+             :{k:'n',p:'反过来：一共有 '+c.T+' '+c.unit+'时，n 是几？写成方程 '+F+' = '+c.T+'，先'+(c.b>=0?'两边减 '+c.b:'两边加 '+(-c.b))+'，再两边除以 '+c.d+'：',pre:'n = ',a:nT,h:'('+c.T+(c.b>=0?' − '+c.b:' + '+(-c.b))+') ÷ '+c.d+' = ?'}
+  ];
+  var q='观察下面的'+c.name+'规律。'+(ask==='N'?'第 '+c.N+' 个有多少'+c.unit+'？':'一共有 '+c.T+' '+c.unit+'时，是第几个？');
+  return {q:q,pic:c,steps:steps,ans:ask==='N'?c.cnt(c.N):nT,ansPre:ask==='N'?'第 '+c.N+' 个：':'n = ',
+    sol:['列表：第1个 '+c.cnt(1)+'，第2个 '+c.cnt(2)+'，第3个 '+c.cnt(3),'每次多 '+c.d+'，第 n 个 = <b>'+F+'</b>',
+      ask==='N'?'第 '+c.N+' 个 = '+c.d+'×'+c.N+(c.b>=0?' + '+c.b:' − '+(-c.b))+' = <b>'+c.cnt(c.N)+'</b>':F+' = '+c.T+' → n = <b>'+nT+'</b>']};
+}
+/* 画图 */
+function drawChain(k,n){
+  var s=26,pts=[],lines=[],W,H;
+  function seg(a,b){lines.push([a,b])}
+  if(k===4){for(var i=0;i<=n;i++){seg([i*s,0],[i*s,s])}for(i=0;i<n;i++){seg([i*s,0],[(i+1)*s,0]);seg([i*s,s],[(i+1)*s,s])}W=n*s;H=s}
+  else if(k===3){var h=s*0.87;for(i=0;i<n;i++){var up=i%2===0,x=i*s/2;if(up){seg([x,h],[x+s/2,0]);seg([x+s/2,0],[x+s,h]);seg([x,h],[x+s,h])}else{seg([x,0],[x+s,0]);seg([x+s,0],[x+s/2,h])}}W=(n+1)*s/2;H=h}
+  else if(k===5){var r=s*0.5;for(i=0;i<=n;i++)seg([i*s,r],[i*s,r+s]);for(i=0;i<n;i++){seg([i*s,r+s],[(i+1)*s,r+s]);seg([i*s,r],[i*s+s/2,0]);seg([i*s+s/2,0],[(i+1)*s,r])}W=n*s;H=r+s}
+  else{var q=s*0.3;for(i=0;i<=n;i++)seg([i*s,q],[i*s,q+s*0.8]);for(i=0;i<n;i++){seg([i*s,q],[i*s+s/2,0]);seg([i*s+s/2,0],[(i+1)*s,q]);seg([i*s,q+s*0.8],[i*s+s/2,2*q+s*0.8]);seg([i*s+s/2,2*q+s*0.8],[(i+1)*s,q+s*0.8])}W=n*s;H=2*q+s*0.8}
+  var p=5,svg='<svg width="'+(W+2*p)+'" height="'+(H+2*p)+'" viewBox="'+(-p)+' '+(-p)+' '+(W+2*p)+' '+(H+2*p)+'">';
+  lines.forEach(function(l){svg+='<line x1="'+l[0][0]+'" y1="'+l[0][1]+'" x2="'+l[1][0]+'" y2="'+l[1][1]+'" stroke="#c98a3a" stroke-width="3" stroke-linecap="round"/>'});
+  var seen={};lines.forEach(function(l){l.forEach(function(pt){var key=Math.round(pt[0])+','+Math.round(pt[1]);if(!seen[key]){seen[key]=1;svg+='<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="2.6" fill="#1f2d3a"/>'}})});
+  return svg+'</svg>';
+}
+function drawDots(arms,n){
+  var g=11,dirs=arms===3?[[0,-1],[-0.87,0.5],[0.87,0.5]]:[[0,-1],[0,1],[-1,0],[1,0]],pts=[[0,0]];
+  for(var a=0;a<arms;a++)for(var i=1;i<n;i++)pts.push([dirs[a][0]*i*g,dirs[a][1]*i*g]);
+  var R=Math.max(1,n-1)*g+6,svg='<svg width="'+(2*R)+'" height="'+(2*R)+'" viewBox="'+(-R)+' '+(-R)+' '+(2*R)+' '+(2*R)+'">';
+  pts.forEach(function(p){svg+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4.2" fill="#1f2d3a"/>'});return svg+'</svg>';
+}
+function picHTML(c){var h='<div class="pic">';for(var n=1;n<=4;n++){h+='<figure>'+(c.kind==='chain'?drawChain(c.k,n):drawDots(c.arms,n))+'<figcaption>'+'①②③④'[n-1]+'</figcaption></figure>'}return h+'<figure><figcaption>……</figcaption></figure></div>'}
+
+/* ================= 三个单元 ================= */
+var MODS={
+fc:{name:'用等式的性质解方程',ic:'x',short:'字母是藏起来的数，天平两边做一样的事',
+ learn:[
+  {k:'想一想 1',t:'字母就是一个藏起来的数',b:'<p>看到 '+L('b')+'，就把它想成一个盖着盖子的盒子 <span class="box"></span>，里面装着一个数，我们要把它找出来。</p><div class="eq">'+L('b')+' − 17.8 = 8.9</div><p>读成：<b>一个数，减去17.8，等于8.9</b>。是不是和二年级的 <span class="box"></span> − 17.8 = 8.9 一模一样？</p>'},
+  {k:'想一想 2',t:'等式像一架天平',b:'<p>等号两边一样重，天平是平的。<b>只动一边，天平就歪了；两边做同样的事，天平还是平的。</b>试试看：</p><div class="bal" id="bal">'+
+    '<svg viewBox="0 0 340 170" aria-label="天平"><polygon points="170,62 150,160 190,160" fill="#9fb3ad"/><g id="beam"><rect x="40" y="56" width="260" height="8" rx="4" fill="#526273"/>'+
+    '<line x1="70" y1="64" x2="70" y2="100" stroke="#526273" stroke-width="2"/><line x1="270" y1="64" x2="270" y2="100" stroke="#526273" stroke-width="2"/>'+
+    '<rect x="20" y="100" width="100" height="44" rx="10" fill="#efeaff" stroke="#6b4fd8" stroke-width="2"/><text id="lt" x="70" y="129" text-anchor="middle" font-size="20" font-weight="700" fill="#1f2d3a">x + 3</text>'+
+    '<rect x="220" y="100" width="100" height="44" rx="10" fill="#e2f5ef" stroke="#0f9d86" stroke-width="2"/><text id="rt" x="270" y="129" text-anchor="middle" font-size="20" font-weight="700" fill="#1f2d3a">10</text></g></svg>'+
+    '<div class="minis"><button class="mini" data-bal="one">只把左边减 3</button><button class="mini" data-bal="both">两边都减 3</button></div><div class="msg" id="balmsg">选一个试试 👆</div></div>'},
+  {k:'想一想 3',t:'用相反的运算，让字母身边的数"走开"',b:'<p>我们的目标：让字母<b>单独</b>站在等号一边。字母身边是什么，就用它的<b>相反运算</b>，而且<b>两边一起做</b>：</p><table class="rule-t"><tr><td>看到</td><td>两边同时</td></tr><tr><td>+ 3</td><td>− 3</td></tr><tr><td>− 3</td><td>+ 3</td></tr><tr><td>× 3（3'+L('x')+'）</td><td>÷ 3</td></tr><tr><td>÷ 3</td><td>× 3</td></tr></table><p class="tip">3'+L('x')+' 就是 3×'+L('x')+'，中间的乘号省略了。</p>'},
+  {k:'想一想 4',t:'两步的题：先脱外套，再脱毛衣',b:'<div class="eq">9'+L('b')+' − 75 = 78</div><p>'+L('b')+' 先被「×9」穿上了毛衣，又被「−75」穿上了外套。<b>最后穿上的最先脱</b>：</p><p>① 先脱外套「−75」：两边 +75 → 9'+L('b')+' = 153</p><p>② 再脱毛衣「×9」：两边 ÷9 → '+L('b')+' = 17</p>'},
+  {k:'想一想 5',t:'做完一定要检验',b:'<p>把答案放回原来的式子算一算，两边相等才对：</p><div class="eq">9×17 − 75 = 153 − 75 = 78 ✓</div><p>检验只要10秒，能把粗心的错全抓出来。</p>'}],
+ example:{eq:'(36 − 4'+L('a')+') ÷ 8 = 1',s:[['(36 − 4'+L('a')+') ÷ 8 = 1','最外面的「÷8」最后穿上，先脱掉。'],['36 − 4'+L('a')+' = 8','两边同时 ×8：1×8 = 8'],['4'+L('a')+' = 36 − 8','4'+L('a')+' 是减数，减数 = 被减数 − 差'],['4'+L('a')+' = 28','算出来'],[L('a')+' = 7','两边同时 ÷4'],['检验：(36 − 4×7) ÷ 8 = 8 ÷ 8 = 1 ✓','放回去算，对了！']]},
+ guided:['e_add','e_two','e_bra'],
+ solo:['e_sub','e_mul','e_div','e_two','e_bra'],
+ say:['怎样让字母身边的「+5」走开？为什么要两边一起做？','9'+L('b')+' − 75 = 78，先处理哪个？为什么？','怎么知道自己算对了？'],
+ check:['能说出「相反运算」，并且说出两边要一起做','两步的题能说出「先处理离字母远的」','会主动把答案代回去检验']},
+dr:{name:'代入求值',ic:'ab',short:'字母之间藏着乘号，换成数再算',
+ learn:[
+  {k:'想一想 1',t:'字母挨在一起，中间藏着乘号',b:'<p>数学家写字母时很"懒"，把乘号省掉了。你看到下面这些，要能马上把乘号补回来：</p><table class="rule-t"><tr><td>看到</td><td>其实是</td></tr><tr><td>'+L('a')+L('b')+'</td><td>'+L('a')+' × '+L('b')+'</td></tr><tr><td>2.5'+L('b')+'</td><td>2.5 × '+L('b')+'</td></tr><tr><td>0.8('+L('x')+'+'+L('y')+')</td><td>0.8 × ('+L('x')+'+'+L('y')+')</td></tr></table>'},
+  {k:'想一想 2',t:'右上角的小2：平方',b:'<p>'+L('e')+'² 读作「'+L('e')+'的平方」，是<b>两个 '+L('e')+' 相乘</b>。来考考你：</p><div class="eq">'+L('e')+' = 4.2 时，'+L('e')+'² = ?</div><div class="minis"><button class="mini" data-sq="no">4.2 × 2 = 8.4</button><button class="mini" data-sq="ok">4.2 × 4.2 = 17.64</button></div><div class="msg fb" id="sqmsg"></div>'},
+  {k:'想一想 3',t:'代入就是"换人上场"',b:'<p>把字母换成题目给的数，就像换人上场。<b>换之前，先把乘号补回来</b>，不然数字会粘在一起：</p><div class="eq">'+L('a')+L('b')+' → '+L('a')+' × '+L('b')+' → 6.5 × 1.4</div><p>如果直接写成 6.51.4，就完全错了。</p>'},
+  {k:'想一想 4',t:'换好后，按运算顺序算',b:'<p>① 有括号先算括号<br>② 平方、乘除先算<br>③ 最后算加减</p><p class="tip">遇到 6.5×1.4 − 2.5×1.4 这种，两个乘法里都有 1.4，可以用分配律：(6.5 − 2.5)×1.4 = 4×1.4 = 5.6。</p>'}],
+ example:{eq:'当 '+L('m')+' = 12，'+L('n')+' = 9 时，求 '+L('m')+'² − '+L('m')+L('n')+' − '+L('n'),s:[[L('m')+' × '+L('m')+' − '+L('m')+' × '+L('n')+' − '+L('n'),'第一步：把式子写完整，补回乘号，平方写成两个相乘'],['12 × 12 − 12 × 9 − 9','第二步：换人上场，字母换成数'],['144 − 108 − 9','第三步：先算乘法'],['= 27','最后从左往右算减法']]},
+ guided:['s_abkb','s_mmn','s_e2d'],
+ solo:['s_kxy','s_ab3','s_e2d','s_mmn','s_abkb'],
+ say:[L('a')+L('b')+' 是什么意思？代入时要先做什么？',L('e')+'² 和 2'+L('e')+' 有什么不一样？','代入后先算什么，后算什么？'],
+ check:['代入前会先把乘号补回来','分得清平方和乘2','按运算顺序算，不从左到右乱算']},
+gl:{name:'找规律',ic:'n',short:'别数图，列表格，每次多几就是几×n',
+ learn:[
+  {k:'想一想 1',t:'不要一个个数，先列表格',b:'<p>第10个、第100个图太大了，画不出来也数不过来。聪明的办法：<b>只数前3个，列成表格</b>。</p>'+picHTML({kind:'chain',k:6})+'<table class="rule-t"><tr><td>第几个</td><td>1</td><td>2</td><td>3</td></tr><tr><td>小棒</td><td>6</td><td>11</td><td>16</td></tr></table>'},
+  {k:'想一想 2',t:'每次多几，就是"几×n"',b:'<p>6 → 11 → 16，每次多 <b>5</b> 根。因为每多一个六边形，和前一个共用一根，只要再加 5 根。</p><div class="eq">每次多 5 → 5×n</div>'},
+  {k:'想一想 3',t:'再看第1个，补多少',b:'<p>第1个有 6 根，可是 5×1 = 5，<b>还差 1</b>。所以：</p><div class="eq">第 n 个 = 5n + 1</div><p>用第2个检验：5×2 + 1 = 11 ✓ 和表格一样，式子就对了。</p>'},
+  {k:'想一想 4',t:'有了式子，想算第几个都行',b:'<p>第10个：把 n 换成 10 → 5×10 + 1 = <b>51</b> 根。</p><p>反过来问"有 101 根小棒，是第几个？"就变成解方程：</p><div class="eq">5n + 1 = 101 → 5n = 100 → n = 20</div><p class="tip">点子图也一样：①1个、②4个、③7个，每次多3 → 3n，第1个 3×1=3，要减2 → 3n − 2。</p>'}],
+ example:{eq:'点子图：①1个 ②4个 ③7个……第8幅有几个点？总数58时 n=?',s:[['1，4，7','先数前3幅，列成表'],['每次多 3','4 − 1 = 3，7 − 4 = 3'],['3n − 2','3×1 = 3，比1多了2，所以减2；检验 3×2 − 2 = 4 ✓'],['3×8 − 2 = 22','第8幅：n 换成 8'],['3n − 2 = 58 → 3n = 60 → n = 20','反过来问，就解方程']]},
+ guided:['p_chain','p_dots','p_chain'],
+ solo:['p_chain','p_dots','p_chain','p_dots','p_chain'],
+ say:['为什么不一个一个数？你先做什么？','式子里「×n」前面的数是怎么找到的？','怎么检验自己的式子写对了？'],
+ check:['会先数前3个列表格','能说出「每次多几就是几×n」','会用第2个图检验式子']}
+};
+/* 老师的周末小练1 */
+function weekendSet(){return [
+  {mod:'fc',p:G.e_sub({l:'b',x:26.7,p:17.8,q:'(1) 如果 '+L('a')+' = '+L('b')+' − 17.8，当 '+L('a')+' = 8.9 时，'+L('b')+' 等于多少？',eq:'8.9 = '+L('b')+' − 17.8，也就是 '+L('b')+' − 17.8 = 8.9',pre:[{k:'n',p:'先把 '+L('a')+' = 8.9 放进去：'+L('b')+' − 17.8 = ',pre:'',a:8.9,h:'a 换成 8.9'}]})},
+  {mod:'fc',p:G.e_div({l:'x',k:3.5,s:0.9,q:'(2) 如果 '+L('y')+' = '+L('x')+' ÷ 3.5，当 '+L('y')+' = 0.9 时，'+L('x')+' 等于多少？',eq:L('x')+' ÷ 3.5 = 0.9'})},
+  {mod:'fc',p:G.e_sub2({k:9,j:5,A:15,x:17})},
+  {mod:'fc',p:G.e_bra({l:'a',x:7,k:4,d:8,e:1,q:'(4) 当 '+L('a')+' 等于多少时，(36 − 4'+L('a')+') ÷ 8 = 1？'})},
+  {mod:'dr',p:G.s_abkb({a:6.5,b:1.4,c:2.5})},
+  {mod:'dr',p:G.s_mmn({m:12,n:9})},
+  {mod:'dr',p:G.s_e2d({e:4.2,d:2.8})},
+  {mod:'dr',p:G.s_kxy({k:0.8,x:3,y:4})},
+  {mod:'gl',p:G.p_chain({k:6,N:10,ask:'N'})},
+  {mod:'gl',p:G.p_dots({arms:3,N:8,T:58,ask:'T'})}
+]}
+
+/* ================= 存档 ================= */
+var KEY='math5-zimu-v1';
+var S=(function(){try{var o=JSON.parse(localStorage.getItem(KEY)||'null');if(o&&o.mods)return o}catch(e){}return {mods:{},wrong:{}}})();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var GAPS=[1,3,7,14];
+function modState(id){return S.mods[id]||{}}
+function isDue(id){var m=modState(id);if(!m.done)return false;return daysSince(m.last)>=GAPS[Math.min(m.stage||0,GAPS.length-1)]}
+
+/* ================= 页面状态 ================= */
+var V={view:'home'}; // home | mod | set
+var app=document.getElementById('app');
+function render(){app.innerHTML=V.view==='home'?homeHTML():V.view==='mod'?modHTML():setHTML();bindAfter()}
+function go(v){V=v;render();window.scrollTo(0,0)}
+
+/* ---- 首页 ---- */
+function homeHTML(){
+  var due=Object.keys(MODS).filter(isDue),wn=Object.keys(S.wrong).filter(function(k){return S.wrong[k]>0}).length;
+  var h='<div class="topbar"><a class="back" href="index.html">‹ 每日5题</a></div><header><h1>用<b>字母</b>表示数</h1><p class="sub">先弄懂思路，再一步一步练。每个单元大约15分钟。</p></header>';
+  if(due.length||wn){h+='<section class="card" style="border:2px solid var(--sun)"><h2>今天要复习</h2><p class="sub">'+(due.length?'学过的单元隔几天再练一次，才能真正记住。':'')+(wn?'还有 '+wn+' 类题之前做错了，换个数字再做一遍。':'')+'</p><button class="btn primary" data-act="review">开始复习（约5分钟）</button></section>'}
+  h+='<section style="display:flex;flex-direction:column;gap:10px"><h2>三个单元，按顺序学</h2>';
+  Object.keys(MODS).forEach(function(id,i){var m=MODS[id],s=modState(id);
+    var badge=s.done?(isDue(id)?'<span class="badge due">该复习了</span>':'<span class="badge done">✓ 学会了</span>'):(s.stage0?'<span class="badge">学到一半</span>':'<span class="badge">还没学</span>');
+    h+='<button class="mod" data-mod="'+id+'"><span class="ic">'+m.ic+'</span><span><b>'+(i+1)+'. '+m.name+'</b><small>'+m.short+'</small></span>'+badge+'</button>'});
+  h+='</section><section class="card"><h2>老师的周末小练 1</h2><p class="sub">三个单元都学完再做。每道题都会一步一步带着做。</p><button class="btn ghost" data-act="weekend">开始做周末小练（10题）</button></section>';
+  h+='<p class="tip"><b>家长看这里：</b>每个单元最后有「说一说」，请听孩子讲一遍，能讲清楚才算学会。讲不清楚的地方，回到「想一想」再看一遍。</p>';
+  return h;
+}
+
+/* ---- 单元：想一想 → 看例题 → 跟着做 → 自己做 → 说一说 ---- */
+var STG=['想一想','看例题','跟着做','自己做','说一说'];
+function openMod(id){var m=MODS[id];
+  V={view:'mod',id:id,stage:0,card:0,ex:1,
+    guided:m.guided.map(function(g){return {g:g,p:G[g](),cur:0,tries:0,log:[]}}),gi:0,
+    solo:shuffle(m.solo).map(function(g){return {g:g,p:G[g](),val:'',res:null,helped:false,cur:0,tries:0,log:[]}}),si:0};
+  S.mods[id]=S.mods[id]||{};S.mods[id].stage0=true;save();render();window.scrollTo(0,0)}
+function stagesBar(){return '<div class="stages">'+STG.map(function(s,i){return '<div class="stg'+(i===V.stage?' on':i<V.stage?' past':'')+'">'+(i+1)+' '+s+'</div>'}).join('')+'</div>'}
+function modHTML(){var m=MODS[V.id];
+  var h='<div class="topbar"><button class="back" data-act="home">‹ 返回</button></div><header><h1 style="font-size:24px">'+m.name+'</h1></header>'+stagesBar();
+  if(V.stage===0){var c=m.learn[V.card];
+    h+='<section class="card lc"><span class="k">'+c.k+' / '+m.learn.length+'</span><h2>'+c.t+'</h2><div class="body">'+c.b+'</div><div class="dots">'+m.learn.map(function(_,i){return '<i'+(i===V.card?' class="on"':'')+'></i>'}).join('')+'</div></section>';
+    h+='<div class="btns">'+(V.card>0?'<button class="btn ghost" data-act="prevcard">上一张</button>':'<span></span>')+'<button class="btn primary" data-act="nextcard">'+(V.card<m.learn.length-1?'懂了，下一张':'懂了，看例题')+'</button></div>';
+  }else if(V.stage===1){var e=m.example;
+    h+='<section class="card"><h2>看我做一遍</h2><div class="qbox">'+e.eq+'</div><div class="wk">'+e.s.slice(0,V.ex).map(function(s,i){return '<div class="s"><span class="n">'+(i+1)+'</span><div><div class="m">'+s[0]+'</div><p>'+s[1]+'</p></div></div>'}).join('')+'</div></section>';
+    h+=V.ex<e.s.length?'<button class="btn primary" data-act="nextex">下一步</button>':'<p class="tip">每一步都看懂了吗？接下来你来做，我在旁边一步一步提醒你。</p><button class="btn primary" data-act="tostage" data-s="2">我来试试</button>';
+  }else if(V.stage===2){var gq=V.guided[V.gi];
+    h+='<p class="prog">跟着做 · 第 '+(V.gi+1)+' / '+V.guided.length+' 题</p>'+guidedHTML(gq,'g');
+    if(gq.cur>=gq.p.steps.length)h+=V.gi<V.guided.length-1?'<button class="btn primary" data-act="nextg">下一题</button>':'<p class="tip">跟着做完了！接下来自己做5道，不再一步一步提示，做错了会告诉你怎么做。</p><button class="btn primary" data-act="tostage" data-s="3">自己做</button>';
+  }else if(V.stage===3){h+=soloHTML()}
+  else{h+=sayHTML(m)}
+  return h;
+}
+function stepHTML(st,i,q,pfx){
+  var done=i<q.cur,cur=i===q.cur,cls='st'+(done?' ok':cur?' cur':'');
+  var h='<div class="'+cls+'">'+(st.p?'<div class="p">'+st.p+'</div>':'');
+  if(st.k==='c'){h+='<div class="opts">'+st.o.map(function(o,j){var c='opt';if(done&&j===st.a)c+=' ok';if(cur&&q.bad&&q.bad.indexOf(j)>=0)c+=' no';return '<button class="'+c+'" data-pick="'+pfx+'|'+i+'|'+j+'"'+(done?' disabled':'')+'>'+o+'</button>'}).join('')+'</div>'}
+  else{h+='<div class="inrow"><span class="pre">'+(st.pre||'')+'</span>'+(done?'<span class="pre" style="color:var(--primary-d)">'+f(st.a)+' ✓</span>':'<input type="text" inputmode="decimal" autocomplete="off" id="in-'+pfx+'-'+i+'" aria-label="填答案"><button class="go" data-num="'+pfx+'|'+i+'">确定</button>')+'</div>'}
+  if(cur&&q.msg)h+='<div class="fb '+q.msgc+'">'+q.msg+'</div>';
+  return h+'</div>';
+}
+function guidedHTML(q,pfx){
+  var p=q.p,h='<section class="card"><div class="qbox">'+p.q+(p.eq?'<div class="eq">'+p.eq+'</div>':'')+(p.pic?picHTML(p.pic):'')+'</div><div class="steps">';
+  for(var i=0;i<=Math.min(q.cur,p.steps.length-1);i++)h+=stepHTML(p.steps[i],i,q,pfx);
+  h+='</div>';
+  if(q.cur>=p.steps.length)h+='<div class="sol"><b>✓ 完成！整理一下：</b>'+p.sol.map(function(s){return '<span class="m">'+s+'</span>'}).join('')+'</div>';
+  return h+'</section>';
+}
+function stepAnswer(q,i,val,isPick){
+  var st=q.p.steps[i];if(i!==q.cur)return;
+  var ok=isPick?(val===st.a):(function(){var v=parseIn(val);return v!==null&&Math.abs(v-st.a)<1e-9})();
+  if(!isPick&&parseIn(val)===null){q.msg='请填一个数。';q.msgc='no';return}
+  if(ok){q.cur++;q.tries=0;q.bad=[];q.msg='';}
+  else{q.tries++;q.wrongAny=true;if(isPick){q.bad=(q.bad||[]).concat([val])}
+    if(q.tries>=2&&st.k==='n'){q.msg='正确答案是 '+f(st.a)+'。记住这一步，接着往下做。';q.msgc='hint';q.cur++;q.tries=0;q.bad=[];q.helped=true}
+    else{q.msg='再想想：'+st.h;q.msgc='hint'}}
+}
+/* 自己做 */
+function soloHTML(){
+  var n=V.solo.length;
+  if(V.si>=n){var ok=V.solo.filter(function(s){return s.res==='ok'}).length;
+    return '<section class="card"><div class="score"><b>'+ok+'/'+n+'</b><span>'+(ok===n?'全对！你真的弄懂了。':'做错的题已经记下来，过几天会换个数字再考你。')+'</span></div></section><button class="btn primary" data-act="tostage" data-s="4">最后一步：说一说</button>'}
+  var s=V.solo[V.si],p=s.p,h='<p class="prog">自己做 · 第 '+(V.si+1)+' / '+n+' 题</p>';
+  if(s.mode==='guided'){h+=guidedHTML(s,'s');if(s.cur>=p.steps.length)h+='<button class="btn primary" data-act="nexts">下一题</button>';return h}
+  h+='<section class="card"><div class="qbox">'+p.q+(p.eq?'<div class="eq">'+p.eq+'</div>':'')+(p.pic?picHTML(p.pic):'')+'</div>';
+  if(!s.res){h+='<p class="sub">在草稿本上一步一步写，写完'+(MODS[V.id]===MODS.fc?'记得检验，':'')+'把答案填进来。</p><div class="inrow"><span class="pre">'+p.ansPre+'</span><input type="text" inputmode="decimal" autocomplete="off" id="solo-in" aria-label="答案"><button class="go" data-act="checksolo">检查</button></div>'}
+  else if(s.res==='ok'){h+='<div class="fb ok">✓ 对了！</div><div class="sol">'+p.sol.map(function(x){return '<span class="m">'+x+'</span>'}).join('')+'</div></section><button class="btn primary" data-act="nexts">下一题</button>';return h}
+  else{h+='<div class="fb no">✗ 你填的是 '+esc(s.val)+'，正确答案是 '+f(p.ans)+'。</div><p class="sub">别急着看答案。点下面的按钮，一步一步再做一遍，找到自己错在哪一步。</p></section><button class="btn primary" data-act="toguided">一步一步再做一遍</button>';return h}
+  return h+'</section>';
+}
+function sayHTML(m){
+  return '<section class="card say"><h2>说一说：讲给爸爸妈妈听</h2><p class="sub">能讲清楚，才是真的学会了。用自己的话回答这三个问题：</p>'+m.say.map(function(q,i){return '<div class="qq">'+(i+1)+'. '+q+'</div>'}).join('')+'</section>'+
+   '<section class="card"><h3>家长打勾（孩子讲清楚了就勾上）</h3>'+m.check.map(function(c,i){return '<label class="chk"><input type="checkbox" id="ck-'+i+'"> <span>'+c+'</span></label>'}).join('')+'<p class="sub">有讲不清楚的，点「回到想一想」再看一遍对应的卡片。</p></section>'+
+   '<div class="btns"><button class="btn ghost" data-act="relearn">回到想一想</button><button class="btn primary" data-act="finish">讲清楚了，完成！</button></div>';
+}
+
+/* ---- 复习 / 周末小练（题组） ---- */
+function openSet(title,items){V={view:'set',title:title,items:items.map(function(it){return {mod:it.mod,g:it.g,p:it.p,val:'',res:null,cur:0,tries:0,mode:it.mode||'solo'}}),i:0,review:title.indexOf('复习')===0};render();window.scrollTo(0,0)}
+function reviewItems(){
+  var out=[];
+  Object.keys(S.wrong).forEach(function(g){if(S.wrong[g]>0){var mod=g.charAt(0)==='e'?'fc':g.charAt(0)==='s'?'dr':'gl';out.push({mod:mod,g:g,p:G[g]()})}});
+  Object.keys(MODS).filter(isDue).forEach(function(id){var gs=shuffle(MODS[id].solo).slice(0,2);gs.forEach(function(g){if(out.length<8)out.push({mod:id,g:g,p:G[g]()})})});
+  return shuffle(out).slice(0,8);
+}
+function setHTML(){
+  var n=V.items.length,h='<div class="topbar"><button class="back" data-act="home">‹ 返回</button></div><header><h1 style="font-size:24px">'+V.title+'</h1></header>';
+  if(V.i>=n){var ok=V.items.filter(function(s){return s.res==='ok'||(s.res===null&&s.mode==='guided'&&!s.wrongAny)}).length;
+    return h+'<section class="card"><div class="score"><b>'+ok+'/'+n+'</b><span>'+(ok===n?'太棒了，全部做对！':'错的题记下来了，下次复习还会出现。')+'</span></div></section><button class="btn primary" data-act="home">回到首页</button>'}
+  var s=V.items[V.i],p=s.p;h+='<p class="prog">第 '+(V.i+1)+' / '+n+' 题 · '+MODS[s.mod].name+'</p>';
+  if(s.mode==='guided'){h+=guidedHTML(s,'t');if(s.cur>=p.steps.length)h+='<button class="btn primary" data-act="nextt">下一题</button>';return h}
+  h+='<section class="card"><div class="qbox">'+p.q+(p.eq?'<div class="eq">'+p.eq+'</div>':'')+(p.pic?picHTML(p.pic):'')+'</div>';
+  if(!s.res)h+='<div class="inrow"><span class="pre">'+p.ansPre+'</span><input type="text" inputmode="decimal" autocomplete="off" id="solo-in" aria-label="答案"><button class="go" data-act="checkset">检查</button></div></section>';
+  else if(s.res==='ok')h+='<div class="fb ok">✓ 对了！</div><div class="sol">'+p.sol.map(function(x){return '<span class="m">'+x+'</span>'}).join('')+'</div></section><button class="btn primary" data-act="nextt">下一题</button>';
+  else h+='<div class="fb no">✗ 你填的是 '+esc(s.val)+'，正确答案是 '+f(p.ans)+'。</div></section><button class="btn primary" data-act="toguidedt">一步一步再做一遍</button>';
+  return h;
+}
+
+/* ================= 事件 ================= */
+function curQ(pfx){return pfx==='g'?V.guided[V.gi]:pfx==='s'?V.solo[V.si]:V.items[V.i]}
+function markWrong(g){S.wrong[g]=(S.wrong[g]||0)+1;save()}
+function markRight(g){if(S.wrong[g]){S.wrong[g]--;if(S.wrong[g]<=0)delete S.wrong[g];save()}}
+app.addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  var mod=b.getAttribute('data-mod');if(mod){openMod(mod);return}
+  var bal=b.getAttribute('data-bal');if(bal){var beam=document.getElementById('beam'),msg=document.getElementById('balmsg');
+    Array.prototype.forEach.call(document.querySelectorAll('[data-bal]'),function(x){x.className='mini'});
+    if(bal==='one'){beam.style.transform='rotate(-9deg)';document.getElementById('lt').textContent='x';document.getElementById('rt').textContent='10';msg.textContent='歪了！只动一边，两边就不一样重了。';msg.style.color='var(--red)';b.className='mini no'}
+    else{beam.style.transform='rotate(0deg)';document.getElementById('lt').textContent='x';document.getElementById('rt').textContent='7';msg.textContent='平了！x = 7。两边做一样的事，天平不歪。';msg.style.color='var(--primary-d)';b.className='mini ok'}return}
+  var sq=b.getAttribute('data-sq');if(sq){var m2=document.getElementById('sqmsg');Array.prototype.forEach.call(document.querySelectorAll('[data-sq]'),function(x){x.className='mini'});
+    b.className='mini '+(sq==='ok'?'ok':'no');m2.className='msg fb '+(sq==='ok'?'ok':'no');m2.textContent=sq==='ok'?'对！平方是两个相同的数相乘。':'这是很多同学会犯的错：平方不是乘2！';return}
+  var pk=b.getAttribute('data-pick');if(pk){var a=pk.split('|'),q=curQ(a[0]);stepAnswer(q,+a[1],+a[2],true);afterStep(a[0]);return}
+  var nm=b.getAttribute('data-num');if(nm){var a2=nm.split('|'),q2=curQ(a2[0]),inp=document.getElementById('in-'+a2[0]+'-'+a2[1]);stepAnswer(q2,+a2[1],inp?inp.value:'',false);afterStep(a2[0]);return}
+  var act=b.getAttribute('data-act');if(!act)return;
+  if(act==='home'){go({view:'home'})}
+  else if(act==='nextcard'){if(V.card<MODS[V.id].learn.length-1)V.card++;else V.stage=1;render();window.scrollTo(0,0)}
+  else if(act==='prevcard'){V.card--;render()}
+  else if(act==='nextex'){V.ex++;render()}
+  else if(act==='tostage'){V.stage=+b.getAttribute('data-s');render();window.scrollTo(0,0)}
+  else if(act==='nextg'){V.gi++;render();window.scrollTo(0,0)}
+  else if(act==='checksolo'||act==='checkset'){var s=act==='checksolo'?V.solo[V.si]:V.items[V.i],val=document.getElementById('solo-in').value,v=parseIn(val);
+    if(v===null){toast('请填一个数');return}
+    s.val=val;s.res=Math.abs(v-s.p.ans)<1e-9?'ok':'no';
+    var gname=s.g;if(gname){if(s.res==='ok')markRight(gname);else markWrong(gname)}
+    render()}
+  else if(act==='toguided'){var s1=V.solo[V.si];s1.mode='guided';s1.cur=0;render()}
+  else if(act==='toguidedt'){var s2=V.items[V.i];s2.mode='guided';s2.cur=0;render()}
+  else if(act==='nexts'){V.si++;render();window.scrollTo(0,0)}
+  else if(act==='nextt'){V.i++;if(V.i>=V.items.length&&V.review){Object.keys(MODS).forEach(function(id){if(isDue(id)){var m=S.mods[id];m.stage=(m.stage||0)+1;m.last=today()}});save()}render();window.scrollTo(0,0)}
+  else if(act==='relearn'){V.stage=0;V.card=0;render();window.scrollTo(0,0)}
+  else if(act==='finish'){var m=S.mods[V.id]=S.mods[V.id]||{};if(!m.done){m.done=true;m.stage=0}m.last=today();save();toast('完成！过几天会提醒你复习。');go({view:'home'})}
+  else if(act==='review'){var it=reviewItems();if(!it.length){toast('今天没有要复习的');return}openSet('复习 · 换个数字再做',it)}
+  else if(act==='weekend'){openSet('老师的周末小练 1',weekendSet().map(function(x){return {mod:x.mod,p:x.p,mode:'guided'}}))}
+});
+function afterStep(pfx){
+  var q=curQ(pfx);
+  if(q.cur>=q.p.steps.length&&q.wrongAny&&pfx!=='g'&&q.g){/* 自己做/复习里切到分步做的题，已经记过错 */}
+  render();
+  var nx=document.querySelector('.st.cur input');if(nx)nx.focus({preventScroll:true});
+}
+app.addEventListener('keydown',function(e){
+  if(e.key!=='Enter'||e.target.tagName!=='INPUT')return;
+  var row=e.target.closest('.inrow');var btn=row&&row.querySelector('button');if(btn)btn.click();
+});
+function bindAfter(){}
+render();
+</script>
+</body>
+</html>
