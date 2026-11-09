@@ -170,17 +170,17 @@ e_div:function(P){P=P||{};var l=P.l||pick(LET),k=P.k||pick([2,3,4,5,2.5,3.5,1.5]
     chooseStep(L(l)+' 后面跟着「÷ '+k+'」，要让它走开，等号两边同时……','乘 '+k,['除以 '+k,'加上 '+k,'减去 '+k],'「÷」的相反运算是「×」。两边都乘 '+k+'。'),
     {k:'n',p:'两边同时乘 '+k+'：',pre:L(l)+' = ',a:x,h:s+' × '+k+' = ?'}]),
     ans:x,ansPre:L(l)+' = ',sol:[L(l)+' ÷ '+k+' = '+s,'两边同时乘 '+k,L(l)+' = '+s+' × '+k,L(l)+' = <b>'+f(x)+'</b>','检验：'+f(x)+' ÷ '+k+' = '+s+' ✓']}},
-e_two:function(P){P=P||{};var l=P.l||pick(LET),k=P.k||ri(2,9),x=P.x||ri(2,20),c=P.c||ri(5,60),s=k*x-c;
+e_two:function(P){P=P||{};var l=P.l||pick(LET),k=P.k||ri(2,9),x=P.x||ri(2,20),c=P.c||ri(5,60),s=r6(k*x-c);
   if(s<=0)return G.e_two(P);
-  return {q:P.q||'解方程（两步）：', eq:k+L(l)+' − '+c+' = '+s, steps:(P.pre||[]).concat([
+  return {q:P.q||'解方程（两步）：', eq:P.noeq?'':k+L(l)+' − '+c+' = '+s, steps:(P.pre||[]).concat([
     chooseStep('先让离 '+L(l)+' 远的「− '+c+'」走开（最后穿上的衣服最先脱），两边同时……','加上 '+c,['减去 '+c,'除以 '+k,'乘 '+k],'先处理外面的「− '+c+'」，它的相反运算是「+ '+c+'」。'),
-    {k:'n',p:'两边同时加上 '+c+'：',pre:k+L(l)+' = ',a:k*x,h:s+' + '+c+' = ?'},
+    {k:'n',p:'两边同时加上 '+c+'：',pre:k+L(l)+' = ',a:r6(k*x),h:s+' + '+c+' = ?'},
     chooseStep('现在 '+L(l)+' 只被「'+k+'×」粘住了，两边同时……','除以 '+k,['乘 '+k,'减去 '+k,'加上 '+k],k+L(l)+' 是 '+k+' 乘 '+L(l)+'，用「÷」让它走开。'),
     {k:'n',p:'两边同时除以 '+k+'：',pre:L(l)+' = ',a:x,h:(k*x)+' ÷ '+k+' = ?'}]),
     ans:x,ansPre:L(l)+' = ',sol:[k+L(l)+' − '+c+' = '+s,'① 两边同时加上 '+c+'：'+k+L(l)+' = '+(k*x),'② 两边同时除以 '+k+'：'+L(l)+' = <b>'+x+'</b>','检验：'+k+'×'+x+' − '+c+' = '+s+' ✓']}},
 e_sub2:function(P){P=P||{};var l='b',k=P.k||ri(3,9),j=P.j||ri(2,6),A=P.A||ri(5,20),x=P.x||ri(5,25),M=k*x-j*A;
   if(M<=0)return G.e_sub2(P);
-  var g=G.e_two({l:l,k:k,x:x,c:j*A,pre:[{k:'n',p:'第一步：先把 '+L('a')+' = '+A+' 代进去。'+j+L('a')+' 就是 '+j+'×'+A+' =',pre:'',a:j*A,h:j+' × '+A+' = ?'}]});
+  var g=G.e_two({l:l,k:k,x:x,c:j*A,noeq:1,pre:[{k:'n',p:'第一步：先把 '+L('a')+' = '+A+' 代进去。'+j+L('a')+' 就是 '+j+'×'+A+' =',pre:'',a:j*A,h:j+' × '+A+' = ?'}]});
   g.q='如果 '+k+L('b')+' − '+j+L('a')+' = '+L('m')+'，当 '+L('m')+' = '+M+'，'+L('a')+' = '+A+' 时，'+L('b')+' 等于多少？';
   g.eq=k+L('b')+' − '+j+'×'+A+' = '+M;
   g.sol=['代入：'+k+L('b')+' − '+j+'×'+A+' = '+M,k+L('b')+' − '+(j*A)+' = '+M,'两边同时加上 '+(j*A)+'：'+k+L('b')+' = '+(M+j*A),'两边同时除以 '+k+'：'+L('b')+' = <b>'+x+'</b>'];
@@ -193,6 +193,37 @@ e_bra:function(P){P=P||{};var l=P.l||pick(['a','x']),x=P.x||ri(2,9),k=P.k||ri(2,
     {k:'n',p:'算一算：',pre:k+L(l)+' = ',a:c-d*e,h:c+' − '+(d*e)+' = ?'},
     {k:'n',p:'两边同时除以 '+k+'：',pre:L(l)+' = ',a:x,h:(c-d*e)+' ÷ '+k+' = ?'}],
     ans:x,ansPre:L(l)+' = ',sol:['('+c+' − '+k+L(l)+') ÷ '+d+' = '+e,'① 两边乘 '+d+'：'+c+' − '+k+L(l)+' = '+(d*e),'② 减数 = 被减数 − 差：'+k+L(l)+' = '+c+' − '+(d*e)+' = '+(c-d*e),'③ 两边除以 '+k+'：'+L(l)+' = <b>'+x+'</b>','检验：('+c+' − '+k+'×'+x+') ÷ '+d+' = '+e+' ✓']}},
+e_rsub:function(P){P=P||{};var l=P.l||pick(['x','t','a']),k=P.k||pick([1,1,2,3,4]),x=P.x||ri(2,15),c=P.c||r6(k*x+ri(3,40)),s=r6(c-k*x),kl=(k>1?k:'')+L(l);
+  var st=[chooseStep(L(l)+' 在「−」后面，被减掉了。先把它请回来：等号两边同时……','加上 '+kl,['减去 '+kl,'加上 '+c,'减去 '+s],'两边都加上 '+kl+'：左边 '+c+' − '+kl+' + '+kl+' = '+c+'，右边变成 '+s+' + '+kl+'。'),
+    chooseStep('现在变成 '+c+' = '+s+' + '+kl+'。要让 '+kl+' 单独留下，两边同时……','减去 '+s,['加上 '+s,'减去 '+c,'除以 '+s],kl+' 身边是「+ '+s+'」，用「−」让它走开。'),
+    {k:'n',p:'两边同时减去 '+s+'：',pre:kl+' = ',a:r6(c-s),h:c+' − '+s+' = ?'}];
+  if(k>1)st.push(chooseStep(kl+' 是 '+k+'×'+L(l)+'，两边同时……','除以 '+k,['乘 '+k,'减去 '+k,'加上 '+k],'「×」的相反运算是「÷」。'),{k:'n',p:'两边同时除以 '+k+'：',pre:L(l)+' = ',a:x,h:f(c-s)+' ÷ '+k+' = ?'});
+  return {q:P.q||'解方程（字母在减号后面）：',eq:P.noeq?'':c+' − '+kl+' = '+s,steps:(P.pre||[]).concat(st),ans:x,ansPre:L(l)+' = ',
+    sol:[c+' − '+kl+' = '+s,'两边加上 '+kl+'：'+c+' = '+s+' + '+kl,'两边减去 '+s+'：'+kl+' = '+f(c-s)].concat(k>1?['两边除以 '+k+'：'+L(l)+' = <b>'+f(x)+'</b>']:[L(l)+' = <b>'+f(x)+'</b>']).concat(['检验：'+c+' − '+(k>1?k+'×':'')+f(x)+' = '+s+' ✓'])}},
+e_rdiv:function(P){P=P||{};var l=P.l||pick(['a','n','y']),k=P.k||1,s=P.s||pick([2,4,5,6,8]),x=P.x||pick([0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.2,1.5,2.5]),c=P.c||r6(s*k*x);
+  if(P.c)x=r6(c/s/k);
+  var kl=(k>1?k:'')+L(l),kv=r6(c/s);
+  var st=[chooseStep(kl+' 在「÷」后面，是除数。先把它请回来：等号两边同时……','乘 '+kl,['除以 '+kl,'乘 '+s,'除以 '+s],'两边都乘 '+kl+'：左边 '+c+' ÷ '+kl+' × '+kl+' = '+c+'，右边变成 '+s+' × '+kl+'。'),
+    chooseStep('现在变成 '+c+' = '+s+' × '+kl+'。要让 '+kl+' 单独留下，两边同时……','除以 '+s,['乘 '+s,'减去 '+s,'除以 '+c],kl+' 被「'+s+'×」粘住了，用「÷ '+s+'」让它走开。'),
+    {k:'n',p:'两边同时除以 '+s+'：',pre:kl+' = ',a:kv,h:c+' ÷ '+s+' = ?（除数是小数的，先把除数变成整数）'}];
+  if(k>1)st.push(chooseStep(kl+' 是 '+k+'×'+L(l)+'，两边同时……','除以 '+k,['乘 '+k,'减去 '+k,'加上 '+k],'「×」的相反运算是「÷」。'),{k:'n',p:'两边同时除以 '+k+'：',pre:L(l)+' = ',a:x,h:f(kv)+' ÷ '+k+' = ?'});
+  return {q:P.q||'解方程（字母在除号后面）：',eq:P.noeq?'':c+' ÷ '+kl+' = '+s,steps:(P.pre||[]).concat(st),ans:x,ansPre:L(l)+' = ',
+    sol:[c+' ÷ '+kl+' = '+s,'两边乘 '+kl+'：'+c+' = '+s+' × '+kl,'两边除以 '+s+'：'+kl+' = '+f(kv)].concat(k>1?['两边除以 '+k+'：'+L(l)+' = <b>'+f(x)+'</b>']:[L(l)+' = <b>'+f(x)+'</b>']).concat(['检验：'+c+' ÷ '+(k>1?'('+k+'×'+f(x)+')':f(x))+' = '+s+' ✓'])}},
+e_mbra:function(P){P=P||{};var l=P.l||pick(['m','b','x']),k=P.k||ri(2,6),op=P.op||pick(['-','+']),c=P.c||ri(2,15),x=P.x||(op==='-'?c+ri(1,12):ri(1,15)),inner=op==='-'?x-c:x+c,s=k*inner;
+  var br=op==='-'?'('+L(l)+' − '+c+')':'('+c+' + '+L(l)+')';
+  return {q:P.q||'解方程（把括号看成一个整体）：',eq:P.noeq?'':k+br+' = '+s,steps:(P.pre||[]).concat([
+    chooseStep('把括号看成一个大盒子：'+k+' × <span class="box"></span> = '+s+'。先让「'+k+'×」走开，两边同时……','除以 '+k,['乘 '+k,'减去 '+k,'加上 '+k],k+br+' 是 '+k+' 乘整个括号，用「÷ '+k+'」。'),
+    {k:'n',p:'两边同时除以 '+k+'：',pre:br+' = ',a:inner,h:s+' ÷ '+k+' = ?'},
+    chooseStep('括号里 '+L(l)+' 身边是「'+(op==='-'?'− ':'+ ')+c+'」，两边同时……',(op==='-'?'加上 ':'减去 ')+c,[(op==='-'?'减去 ':'加上 ')+c,'乘 '+c,'除以 '+c],'用相反的运算让它走开。'),
+    {k:'n',p:'',pre:L(l)+' = ',a:x,h:inner+(op==='-'?' + ':' − ')+c+' = ?'}]),
+    ans:x,ansPre:L(l)+' = ',sol:[k+br+' = '+s,'两边除以 '+k+'：'+br+' = '+inner,'两边'+(op==='-'?'加上 ':'减去 ')+c+'：'+L(l)+' = <b>'+x+'</b>','检验：'+k+'×('+(op==='-'?x+' − '+c:c+' + '+x)+') = '+s+' ✓']}},
+e_twop:function(P){P=P||{};var l=P.l||pick(LET),k=P.k||ri(2,9),x=P.x||ri(2,15),c=P.c||d1(1,9),s=r6(k*x+c);
+  return {q:P.q||'解方程（两步）：',eq:P.noeq?'':k+L(l)+' + '+c+' = '+s,steps:(P.pre||[]).concat([
+    chooseStep('先让离 '+L(l)+' 远的「+ '+c+'」走开，两边同时……','减去 '+c,['加上 '+c,'除以 '+k,'乘 '+k],'外面的「+ '+c+'」先处理，相反运算是「− '+c+'」。'),
+    {k:'n',p:'两边同时减去 '+c+'：',pre:k+L(l)+' = ',a:k*x,h:s+' − '+c+' = ?'},
+    chooseStep('现在两边同时……','除以 '+k,['乘 '+k,'减去 '+k,'加上 '+k],k+L(l)+' 是 '+k+'×'+L(l)+'，用「÷ '+k+'」。'),
+    {k:'n',p:'两边同时除以 '+k+'：',pre:L(l)+' = ',a:x,h:(k*x)+' ÷ '+k+' = ?'}]),
+    ans:x,ansPre:L(l)+' = ',sol:[k+L(l)+' + '+c+' = '+s,'① 两边减去 '+c+'：'+k+L(l)+' = '+(k*x),'② 两边除以 '+k+'：'+L(l)+' = <b>'+x+'</b>','检验：'+k+'×'+x+' + '+c+' = '+s+' ✓']}},
 /* ---- 代入求值 ---- */
 s_kxy:function(P){P=P||{};var k=P.k||pick([0.2,0.4,0.5,0.6,0.8,1.5,2.5]),x=P.x||ri(1,9),y=P.y||ri(1,9),v=r6(k*(x+y));
   return {q:'当 '+L('x')+' = '+x+'，'+L('y')+' = '+y+' 时，求 '+k+'('+L('x')+' + '+L('y')+') 的值。', steps:[
@@ -230,30 +261,43 @@ s_ab3:function(P){P=P||{};var p=ri(2,5),q=ri(2,5),a=d1(1,9),b=ri(2,9),v=r6(p*a+q
     {k:'n',p:'第三步：先乘后加：',pre:f(p*a)+' + '+(q*b)+' = ',a:v,h:'把两个积加起来。'}],
     ans:v,ansPre:'结果 = ',sol:[p+' × '+a+' + '+q+' × '+b,'= '+f(p*a)+' + '+(q*b),'= <b>'+f(v)+'</b>']}},
 /* ---- 找规律 ---- */
-p_chain:function(P){P=P||{};var k=P.k||pick([3,4,5,6]),name={3:'三角形',4:'正方形',5:'五边形',6:'六边形'}[k],d=k-1,cnt=function(n){return d*n+1};
-  var N=P.N||ri(8,15),T=P.T||cnt(ri(16,30));return pat({kind:'chain',k:k,name:name,unit:'根小棒',what:'摆 n 个'+name,d:d,b:1,cnt:cnt,N:N,T:T,ask:P.ask})},
-p_dots:function(P){P=P||{};var arms=P.arms||pick([3,4]),d=arms,cnt=function(n){return arms*(n-1)+1};
-  var N=P.N||ri(7,12),T=P.T||cnt(ri(15,25));return pat({kind:'dots',arms:arms,name:arms===3?'Y形点子图':'十字形点子图',unit:'个点',what:'第 n 幅',d:d,b:1-arms,cnt:cnt,N:N,T:T,ask:P.ask})}
+p_chain:function(P){P=P||{};var k=P.k||pick([3,4,5,6]),name={3:'三角形',4:'正方形',5:'五边形',6:'六边形'}[k],d=k-1;
+  return pat({kind:'chain',k:k,name:name,unit:'根小棒',item:'个'+name,d:d,b:1,asks:P.asks,wrong:P.wrong,q:P.q})},
+p_dots:function(P){P=P||{};var arms=P.arms||pick([3,4]);
+  return pat({kind:'dots',arms:arms,name:arms===3?'Y形点子图':'十字形点子图',unit:'个点',item:'幅',d:arms,b:1-arms,asks:P.asks,q:P.q,lab:function(n){return '第'+n+'幅：'}})},
+p_table:function(P){P=P||{};var mode=P.mode||pick(['side','row']),side=mode==='side';
+  return pat({kind:'table',mode:mode,name:'桌子摆法'+(side?'①':'②'),unit:'人',item:'张桌子',d:side?2:6,b:side?6:2,asks:P.asks,q:P.q,lab:function(n){return n+'张桌子：'},
+    note:side?'桌子并排摆，上下各多1人，左右两头一直是3人。':'桌子连成一长条，上下各多3人，两头一直各1人。'})},
+p_hexseat:function(P){P=P||{};
+  return pat({kind:'hexseat',name:'六边形实验桌',unit:'人',item:'张桌子',d:8,b:4,asks:P.asks,q:P.q,v:'m',lab:function(n){return n+'张桌子：'},note:'两张桌子拼在一起，拼住的那条边两边各少了2个座位。'})},
+p_fish:function(P){P=P||{};
+  return pat({kind:'fish',name:'火柴棒"金鱼"',unit:'根火柴棒',item:'条金鱼',d:6,b:2,asks:P.asks,q:P.q,lab:function(n){return n+'条金鱼：'}})}
 };
 function fm(d,b){return d+'n'+(b>0?' + '+b:b<0?' − '+(-b):'')}
 function pat(c){
-  var F=fm(c.d,c.b),wrong=[fm(c.d+1,0),fm(c.cnt(1),0),fm(c.d,c.b+1)];
-  if(c.b===0)wrong[2]=fm(c.d,1);
-  var nT=(c.T-c.b)/c.d;
-  var ask=c.ask||pick(['N','T']);
+  c.cnt=function(n){return c.d*n+c.b};
+  var lab=c.lab||function(n){return '第'+n+'个：'};
+  var F=fm(c.d,c.b),wrong=c.wrong;
+  if(!wrong){wrong=[];[fm(c.cnt(1),0),fm(c.d,c.b+1),fm(c.d+1,c.b),fm(c.d,c.b-1),fm(c.d+1,0)].forEach(function(w){if(w!==F&&wrong.indexOf(w)<0&&wrong.length<3)wrong.push(w)})}
+  var asks=c.asks||[pick([{t:'N',N:ri(8,15)},{t:'T',T:c.d*ri(16,30)+c.b}])];
+  var bs=function(sign){return c.b>=0?(sign?' + ':'')+c.b:' − '+(-c.b)};
   var steps=[
-    {k:'n',p:'别急着数大的！先看图，数一数前3个：',pre:'第1个：',a:c.cnt(1),h:'一根一根数，数过的做个记号。'},
-    {k:'n',p:'',pre:'第2个：',a:c.cnt(2),h:'第2个比第1个多了几根？'},
-    {k:'n',p:'',pre:'第3个：',a:c.cnt(3),h:'第3个比第2个又多了几根？'},
-    {k:'n',p:'每多一个，就多几'+c.unit+'？',pre:'每次多：',a:c.d,h:c.cnt(2)+' − '+c.cnt(1)+' = ?'},
-    chooseStep('每次多 '+c.d+'，就是「'+c.d+'×n」。第1个是 '+c.cnt(1)+'，'+c.d+'×1 = '+c.d+'，还要'+(c.b>=0?'补 '+c.b:'减 '+(-c.b))+'。所以第 n 个是……',F,wrong,'用第2个检验：'+c.d+'×2'+(c.b>=0?' + '+c.b:' − '+(-c.b))+' 应该等于 '+c.cnt(2)+'。'),
-    ask==='N'?{k:'n',p:'用式子算第 '+c.N+' 个（把 n 换成 '+c.N+'）：',pre:fm(c.d,c.b).replace('n','×'+c.N)+' = ',a:c.cnt(c.N),h:c.d+' × '+c.N+' 先算，再'+(c.b>=0?'加':'减')+'。'}
-             :{k:'n',p:'反过来：一共有 '+c.T+' '+c.unit+'时，n 是几？写成方程 '+F+' = '+c.T+'，先'+(c.b>=0?'两边减 '+c.b:'两边加 '+(-c.b))+'，再两边除以 '+c.d+'：',pre:'n = ',a:nT,h:'('+c.T+(c.b>=0?' − '+c.b:' + '+(-c.b))+') ÷ '+c.d+' = ?'}
+    {k:'n',p:'别急着算大的！先看图，数一数前3个：',pre:lab(1),a:c.cnt(1),h:'一个一个数，数过的做个记号。'},
+    {k:'n',p:'',pre:lab(2),a:c.cnt(2),h:'第2个比第1个多了几'+c.unit+'？'},
+    {k:'n',p:'',pre:lab(3),a:c.cnt(3),h:'第3个比第2个又多了几'+c.unit+'？'},
+    {k:'n',p:'每多一'+c.item+'，就多几'+c.unit+'？'+(c.note?'<small>'+c.note+'</small>':''),pre:'每次多：',a:c.d,h:c.cnt(2)+' − '+c.cnt(1)+' = ?'},
+    chooseStep('每次多 '+c.d+'，就是「'+c.d+'×n」。第1个是 '+c.cnt(1)+'，'+c.d+'×1 = '+c.d+'，还要'+(c.b>=0?'补 '+c.b:'减 '+(-c.b))+'。所以第 n 个是……',F,wrong,'用第2个检验：'+c.d+'×2'+bs(1)+' 应该等于 '+c.cnt(2)+'。')
   ];
-  var q='观察下面的'+c.name+'规律。'+(ask==='N'?'第 '+c.N+' 个有多少'+c.unit+'？':'一共有 '+c.T+' '+c.unit+'时，是第几个？');
-  return {q:q,pic:c,steps:steps,ans:ask==='N'?c.cnt(c.N):nT,ansPre:ask==='N'?'第 '+c.N+' 个：':'n = ',
-    sol:['列表：第1个 '+c.cnt(1)+'，第2个 '+c.cnt(2)+'，第3个 '+c.cnt(3),'每次多 '+c.d+'，第 n 个 = <b>'+F+'</b>',
-      ask==='N'?'第 '+c.N+' 个 = '+c.d+'×'+c.N+(c.b>=0?' + '+c.b:' − '+(-c.b))+' = <b>'+c.cnt(c.N)+'</b>':F+' = '+c.T+' → n = <b>'+nT+'</b>']};
+  var sol=['列表：'+lab(1)+c.cnt(1)+'，'+lab(2)+c.cnt(2)+'，'+lab(3)+c.cnt(3),'每次多 '+c.d+'，所以 '+(c.v?c.v+' = ':'第 n 个 = ')+'<b>'+F+'</b>'],ans=null,ansPre='',qs=[];
+  asks.forEach(function(a){
+    if(a.t==='N'){var v=c.cnt(a.N);steps.push({k:'n',p:'用式子算 '+lab(a.N).replace('：','')+'（把 n 换成 '+a.N+'）：',pre:c.d+'×'+a.N+bs(1)+' = ',a:v,h:'先算 '+c.d+' × '+a.N+'，再'+(c.b>=0?'加 '+c.b:'减 '+(-c.b))+'。'});
+      sol.push(lab(a.N).replace('：','')+'：'+c.d+'×'+a.N+bs(1)+' = <b>'+v+'</b>'+c.unit);ans=v;ansPre=lab(a.N);qs.push(lab(a.N).replace('：','')+'有多少'+c.unit+'？')}
+    else if(a.t==='T'||a.t==='TM'){var q=Math.floor((a.T-c.b)/c.d),rem=(a.T-c.b)-q*c.d;
+      steps.push({k:'n',p:'反过来：有 '+a.T+' '+c.unit+'，写成方程 '+F+' = '+a.T+'。先两边'+(c.b>=0?'减 '+c.b:'加 '+(-c.b))+'，再两边除以 '+c.d+'。'+(rem?'<small>除不尽时，余下的不够再摆一'+c.item+'，要舍去（去尾法）。</small>':''),pre:'n = ',a:q,h:'('+a.T+(c.b>=0?' − '+c.b:' + '+(-c.b))+') ÷ '+c.d+' = ?'+(rem?' 商是几，余数不要。':'')});
+      sol.push(F+' = '+a.T+' → n = ('+a.T+(c.b>=0?' − '+c.b:' + '+(-c.b))+') ÷ '+c.d+(rem?' = '+q+' …… '+rem+'，最多 <b>'+q+'</b>':' = <b>'+q+'</b>'));ans=q;ansPre='n = ';qs.push('有 '+a.T+' '+c.unit+'时，'+(rem?'最多':'')+'是第几个？')}
+  });
+  var q=c.q||('观察下面的'+c.name+'规律。'+qs.join(''));
+  return {q:q,pic:c,steps:steps,ans:ans,ansPre:ansPre,sol:sol};
 }
 /* 画图 */
 function drawChain(k,n){
@@ -274,7 +318,39 @@ function drawDots(arms,n){
   var R=Math.max(1,n-1)*g+6,svg='<svg width="'+(2*R)+'" height="'+(2*R)+'" viewBox="'+(-R)+' '+(-R)+' '+(2*R)+' '+(2*R)+'">';
   pts.forEach(function(p){svg+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4.2" fill="#1f2d3a"/>'});return svg+'</svg>';
 }
-function picHTML(c){var h='<div class="pic">';for(var n=1;n<=4;n++){h+='<figure>'+(c.kind==='chain'?drawChain(c.k,n):drawDots(c.arms,n))+'<figcaption>'+'①②③④'[n-1]+'</figcaption></figure>'}return h+'<figure><figcaption>……</figcaption></figure></div>'}
+function svgWrap(W,H,inner,p){p=p||6;return '<svg width="'+(W+2*p)+'" height="'+(H+2*p)+'" viewBox="'+(-p)+' '+(-p)+' '+(W+2*p)+' '+(H+2*p)+'">'+inner+'</svg>'}
+function seat(x,y){return '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="4" fill="#fff" stroke="#1f2d3a" stroke-width="1.4"/>'}
+function drawTables(mode,n){
+  var o='',g=11,i,j;
+  if(mode==='side'){var w=22,h=44,x0=g,y0=g;
+    for(i=0;i<n;i++){o+='<rect x="'+(x0+i*w)+'" y="'+y0+'" width="'+w+'" height="'+h+'" fill="#fdf3e3" stroke="#1f2d3a" stroke-width="1.4"/>';o+=seat(x0+i*w+w/2,y0-g+3)+seat(x0+i*w+w/2,y0+h+g-3)}
+    for(j=0;j<3;j++){o+=seat(x0-g+4,y0+h*(j+0.5)/3)+seat(x0+n*w+g-4,y0+h*(j+0.5)/3)}
+    return svgWrap(n*w+2*g,h+2*g,o,4)}
+  var w2=42,h2=22,x1=g,y1=g;
+  for(i=0;i<n;i++){o+='<rect x="'+(x1+i*w2)+'" y="'+y1+'" width="'+w2+'" height="'+h2+'" fill="#fdf3e3" stroke="#1f2d3a" stroke-width="1.4"/>';for(j=0;j<3;j++){o+=seat(x1+i*w2+w2*(j+0.5)/3,y1-g+3)+seat(x1+i*w2+w2*(j+0.5)/3,y1+h2+g-3)}}
+  o+=seat(x1-g+4,y1+h2/2)+seat(x1+n*w2+g-4,y1+h2/2);
+  return svgWrap(n*w2+2*g,h2+2*g,o,4)}
+function drawHexSeats(n){
+  var R=18,dx=R*Math.sqrt(3),o='',cy=R+12,cx0=R+12,i,k;
+  for(i=0;i<n;i++){var cx=cx0+i*dx,pts=[];for(k=0;k<6;k++){var t=(-90+60*k)*Math.PI/180;pts.push([cx+R*Math.cos(t),cy+R*Math.sin(t)])}
+    o+='<polygon points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ')+'" fill="#fdf3e3" stroke="#1f2d3a" stroke-width="1.4"/>';
+    for(k=0;k<6;k++){var a=pts[k],b=pts[(k+1)%6];
+      if(k===1&&i<n-1)continue; if(k===4&&i>0)continue;
+      var mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,nx=mx-cx,ny=my-cy,L2=Math.sqrt(nx*nx+ny*ny);nx/=L2;ny/=L2;
+      [0.27,0.73].forEach(function(f){var px=a[0]+(b[0]-a[0])*f+nx*8,py=a[1]+(b[1]-a[1])*f+ny*8;o+=seat(px,py)})}}
+  return svgWrap(cx0*2+(n-1)*dx,cy*2,o,2)}
+function drawFish(n){
+  var u=10,o='',segs=[],dots=[],i;
+  function P(p,q){return [p*u+4,(q+2)*u+4]}
+  segs.push([P(0,-1),P(1,0)],[P(0,1),P(1,0)]);dots.push(P(0,-1),P(0,1));
+  for(i=0;i<n;i++){var x=2*i+1;segs.push([P(x,0),P(x+1,-1)],[P(x+1,-1),P(x+2,0)],[P(x+2,0),P(x+1,1)],[P(x+1,1),P(x,0)],[P(x,-2),P(x+1,-1)],[P(x,2),P(x+1,1)]);dots.push(P(x,-2),P(x,2),P(x+1,-1),P(x+1,1))}
+  segs.forEach(function(s){o+='<line x1="'+s[0][0]+'" y1="'+s[0][1]+'" x2="'+s[1][0]+'" y2="'+s[1][1]+'" stroke="#c98a3a" stroke-width="2.6" stroke-linecap="round"/>'});
+  dots.forEach(function(d){o+='<circle cx="'+d[0]+'" cy="'+d[1]+'" r="2.4" fill="#1f2d3a"/>'});
+  return svgWrap((2*n+1)*u+8,4*u+8,o,2)}
+function picHTML(c){var h='<div class="pic">',N=(c.kind==='table'||c.kind==='hexseat')?3:4;
+  for(var n=1;n<=N;n++){var s=c.kind==='chain'?drawChain(c.k,n):c.kind==='dots'?drawDots(c.arms,n):c.kind==='table'?drawTables(c.mode,n):c.kind==='hexseat'?drawHexSeats(n):drawFish(n);
+    h+='<figure>'+s+'<figcaption>'+'①②③④'[n-1]+'</figcaption></figure>'}
+  return h+'<figure><figcaption>……</figcaption></figure></div>'}
 
 /* ================= 三个单元 ================= */
 var MODS={
@@ -289,10 +365,12 @@ fc:{name:'用等式的性质解方程',ic:'x',short:'字母是藏起来的数，
     '<div class="minis"><button class="mini" data-bal="one">只把左边减 3</button><button class="mini" data-bal="both">两边都减 3</button></div><div class="msg" id="balmsg">选一个试试 👆</div></div>'},
   {k:'想一想 3',t:'用相反的运算，让字母身边的数"走开"',b:'<p>我们的目标：让字母<b>单独</b>站在等号一边。字母身边是什么，就用它的<b>相反运算</b>，而且<b>两边一起做</b>：</p><table class="rule-t"><tr><td>看到</td><td>两边同时</td></tr><tr><td>+ 3</td><td>− 3</td></tr><tr><td>− 3</td><td>+ 3</td></tr><tr><td>× 3（3'+L('x')+'）</td><td>÷ 3</td></tr><tr><td>÷ 3</td><td>× 3</td></tr></table><p class="tip">3'+L('x')+' 就是 3×'+L('x')+'，中间的乘号省略了。</p>'},
   {k:'想一想 4',t:'两步的题：先脱外套，再脱毛衣',b:'<div class="eq">9'+L('b')+' − 75 = 78</div><p>'+L('b')+' 先被「×9」穿上了毛衣，又被「−75」穿上了外套。<b>最后穿上的最先脱</b>：</p><p>① 先脱外套「−75」：两边 +75 → 9'+L('b')+' = 153</p><p>② 再脱毛衣「×9」：两边 ÷9 → '+L('b')+' = 17</p>'},
-  {k:'想一想 5',t:'做完一定要检验',b:'<p>把答案放回原来的式子算一算，两边相等才对：</p><div class="eq">9×17 − 75 = 153 − 75 = 78 ✓</div><p>检验只要10秒，能把粗心的错全抓出来。</p>'}],
+  {k:'想一想 5',t:'字母躲在「−」或「÷」后面怎么办？',b:'<div class="eq">30 − '+L('x')+' = 11</div><p>'+L('x')+' 被减掉了。先<b>把它请回来</b>：两边同时加上 '+L('x')+'，变成 30 = 11 + '+L('x')+'，再两边减去 11，'+L('x')+' = 19。</p><div class="eq">3.6 ÷ '+L('a')+' = 4</div><p>'+L('a')+' 是除数。两边同时乘 '+L('a')+'，变成 3.6 = 4'+L('a')+'，再两边除以 4，'+L('a')+' = 0.9。</p><p class="tip">口诀：字母在「−」「÷」后面，先请它回来，变成「+」「×」，就会做了。</p>'},
+  {k:'想一想 6',t:'"如果……当……时"：先放进去，变成方程',b:'<p>老师常这样出题：</p><div class="eq">如果 '+L('y')+' = 30 − '+L('x')+'，当 '+L('y')+' = 11 时，'+L('x')+' = ?</div><p>第一步：把知道的 '+L('y')+' = 11 放进去，就变成我们会解的方程：<b>30 − '+L('x')+' = 11</b>。</p><p>遇到括号 3('+L('m')+' − 12) = 15，把括号看成一个大盒子：3 × <span class="box"></span> = 15，盒子里是 5，所以 '+L('m')+' − 12 = 5，'+L('m')+' = 17。</p>'},
+  {k:'想一想 7',t:'做完一定要检验',b:'<p>把答案放回原来的式子算一算，两边相等才对：</p><div class="eq">9×17 − 75 = 153 − 75 = 78 ✓</div><p>检验只要10秒，能把粗心的错全抓出来。</p>'}],
  example:{eq:'(36 − 4'+L('a')+') ÷ 8 = 1',s:[['(36 − 4'+L('a')+') ÷ 8 = 1','最外面的「÷8」最后穿上，先脱掉。'],['36 − 4'+L('a')+' = 8','两边同时 ×8：1×8 = 8'],['4'+L('a')+' = 36 − 8','4'+L('a')+' 是减数，减数 = 被减数 − 差'],['4'+L('a')+' = 28','算出来'],[L('a')+' = 7','两边同时 ÷4'],['检验：(36 − 4×7) ÷ 8 = 8 ÷ 8 = 1 ✓','放回去算，对了！']]},
- guided:['e_add','e_two','e_bra'],
- solo:['e_sub','e_mul','e_div','e_two','e_bra'],
+ guided:['e_add','e_two','e_rsub','e_mbra'],
+ solo:['e_sub','e_mul','e_div','e_two','e_bra','e_rsub','e_rdiv','e_mbra','e_twop'],soloN:6,
  say:['怎样让字母身边的「+5」走开？为什么要两边一起做？','9'+L('b')+' − 75 = 78，先处理哪个？为什么？','怎么知道自己算对了？'],
  check:['能说出「相反运算」，并且说出两边要一起做','两步的题能说出「先处理离字母远的」','会主动把答案代回去检验']},
 dr:{name:'代入求值',ic:'ab',short:'字母之间藏着乘号，换成数再算',
@@ -311,14 +389,38 @@ gl:{name:'找规律',ic:'n',short:'别数图，列表格，每次多几就是几
   {k:'想一想 1',t:'不要一个个数，先列表格',b:'<p>第10个、第100个图太大了，画不出来也数不过来。聪明的办法：<b>只数前3个，列成表格</b>。</p>'+picHTML({kind:'chain',k:6})+'<table class="rule-t"><tr><td>第几个</td><td>1</td><td>2</td><td>3</td></tr><tr><td>小棒</td><td>6</td><td>11</td><td>16</td></tr></table>'},
   {k:'想一想 2',t:'每次多几，就是"几×n"',b:'<p>6 → 11 → 16，每次多 <b>5</b> 根。因为每多一个六边形，和前一个共用一根，只要再加 5 根。</p><div class="eq">每次多 5 → 5×n</div>'},
   {k:'想一想 3',t:'再看第1个，补多少',b:'<p>第1个有 6 根，可是 5×1 = 5，<b>还差 1</b>。所以：</p><div class="eq">第 n 个 = 5n + 1</div><p>用第2个检验：5×2 + 1 = 11 ✓ 和表格一样，式子就对了。</p>'},
-  {k:'想一想 4',t:'有了式子，想算第几个都行',b:'<p>第10个：把 n 换成 10 → 5×10 + 1 = <b>51</b> 根。</p><p>反过来问"有 101 根小棒，是第几个？"就变成解方程：</p><div class="eq">5n + 1 = 101 → 5n = 100 → n = 20</div><p class="tip">点子图也一样：①1个、②4个、③7个，每次多3 → 3n，第1个 3×1=3，要减2 → 3n − 2。</p>'}],
+  {k:'想一想 4',t:'有了式子，想算第几个都行',b:'<p>第10个：把 n 换成 10 → 5×10 + 1 = <b>51</b> 根。</p><p>反过来问"有 101 根小棒，是第几个？"就变成解方程：</p><div class="eq">5n + 1 = 101 → 5n = 100 → n = 20</div><p class="tip">点子图也一样：①1个、②4个、③7个，每次多3 → 3n，第1个 3×1=3，要减2 → 3n − 2。</p>'},
+  {k:'想一想 5',t:'桌子和座位：摆法不同，规律不同',b:'<p>一张桌子坐8人。<b>并排摆</b>：</p>'+picHTML({kind:'table',mode:'side'})+'<p>8 → 10 → 12，每多一张多 2 人，第 n 个 = 2n + 6。</p><p><b>连成一长条</b>：</p>'+picHTML({kind:'table',mode:'row'})+'<p>8 → 14 → 20，每多一张多 6 人，第 n 个 = 6n + 2。</p><p class="tip">同样的桌子，摆法不一样，式子就不一样。所以一定要自己数前3个，不能套别的题的式子。</p>'},
+  {k:'想一想 6',t:'除不尽：余下的不够，就舍去',b:'<p>摆一条"金鱼"：8 根，两条 14 根，三条 20 根 → 6n + 2。</p><p>有 2026 根火柴棒，最多摆几条？</p><div class="eq">(2026 − 2) ÷ 6 = 337 …… 2</div><p>余下的 2 根不够再摆一条，所以最多 <b>337</b> 条。这叫"去尾法"。</p>'}],
  example:{eq:'点子图：①1个 ②4个 ③7个……第8幅有几个点？总数58时 n=?',s:[['1，4，7','先数前3幅，列成表'],['每次多 3','4 − 1 = 3，7 − 4 = 3'],['3n − 2','3×1 = 3，比1多了2，所以减2；检验 3×2 − 2 = 4 ✓'],['3×8 − 2 = 22','第8幅：n 换成 8'],['3n − 2 = 58 → 3n = 60 → n = 20','反过来问，就解方程']]},
- guided:['p_chain','p_dots','p_chain'],
- solo:['p_chain','p_dots','p_chain','p_dots','p_chain'],
+ guided:['p_chain','p_table','p_fish'],
+ solo:['p_chain','p_dots','p_table','p_hexseat','p_fish'],
  say:['为什么不一个一个数？你先做什么？','式子里「×n」前面的数是怎么找到的？','怎么检验自己的式子写对了？'],
  check:['会先数前3个列表格','能说出「每次多几就是几×n」','会用第2个图检验式子']}
 };
 /* 老师的周末小练1 */
+function subStep(given,eq,wrongs){return chooseStep('第一步：把 '+given+' 放进去，变成方程：',eq,wrongs,'把字母换成题目给的数，其他照抄。')}
+function withSub(p,q,given,eq,wrongs){p.q=q;p.eq='';p.steps.unshift(subStep(given,eq,wrongs));return p}
+function setEq(){return [
+  {mod:'fc',p:withSub(G.e_rsub({l:'x',c:30,k:1,x:19,noeq:1}),'第一组 (1) 如果 '+L('y')+' = 30 − '+L('x')+'，当 '+L('y')+' = 11 时，'+L('x')+' 等于多少？',L('y')+' = 11','30 − '+L('x')+' = 11',['11 − '+L('x')+' = 30','30 + '+L('x')+' = 11','30 − 11 = '+L('y')])},
+  {mod:'fc',p:withSub(G.e_rdiv({l:'a',c:3.6,s:4,noeq:1}),'第一组 (2) 如果 '+L('b')+' = 3.6 ÷ '+L('a')+'，当 '+L('b')+' = 4 时，'+L('a')+' 等于多少？',L('b')+' = 4','3.6 ÷ '+L('a')+' = 4',['4 ÷ '+L('a')+' = 3.6','3.6 × '+L('a')+' = 4','3.6 ÷ 4 = '+L('b')])},
+  {mod:'fc',p:withSub(G.e_two({l:'p',k:6,x:5,c:4.2,noeq:1}),'第一组 (3) 如果 '+L('q')+' = 6'+L('p')+' − 4.2，当 '+L('q')+' = 25.8 时，'+L('p')+' 等于多少？',L('q')+' = 25.8','6'+L('p')+' − 4.2 = 25.8',['6 − 4.2 = 25.8'+L('p'),'25.8'+L('p')+' − 4.2 = 6','6'+L('p')+' + 4.2 = 25.8'])},
+  {mod:'fc',p:withSub(G.e_mbra({l:'m',k:3,op:'-',c:12,x:17,noeq:1}),'第一组 (4) 如果 '+L('n')+' = 3('+L('m')+' − 12)，当 '+L('n')+' = 15 时，'+L('m')+' 等于多少？',L('n')+' = 15','3('+L('m')+' − 12) = 15',['3 × '+L('m')+' − 12 = 15','15('+L('m')+' − 12) = 3','3('+L('m')+' + 12) = 15'])},
+  {mod:'fc',p:withSub(G.e_rsub({l:'x',c:52.4,k:4,x:12,noeq:1}),'第一组 (5) 如果 '+L('y')+' = 52.4 − 4'+L('x')+'，当 '+L('y')+' = 4.4 时，'+L('x')+' 等于多少？',L('y')+' = 4.4','52.4 − 4'+L('x')+' = 4.4',['4.4 − 4'+L('x')+' = 52.4','52.4 − 4 = 4.4'+L('x'),'52.4 + 4'+L('x')+' = 4.4'])},
+  {mod:'fc',p:withSub(G.e_rsub({l:'t',c:45,k:1,x:28,noeq:1}),'第二组 (1) 如果 '+L('s')+' = 45 − '+L('t')+'，当 '+L('s')+' = 17 时，'+L('t')+' 等于多少？',L('s')+' = 17','45 − '+L('t')+' = 17',['17 − '+L('t')+' = 45','45 + '+L('t')+' = 17','45 − 17 = '+L('s')])},
+  {mod:'fc',p:withSub(G.e_rdiv({l:'n',c:4.8,s:6,noeq:1}),'第二组 (2) 如果 '+L('m')+' = 4.8 ÷ '+L('n')+'，当 '+L('m')+' = 6 时，'+L('n')+' 等于多少？',L('m')+' = 6','4.8 ÷ '+L('n')+' = 6',['6 ÷ '+L('n')+' = 4.8','4.8 × '+L('n')+' = 6','4.8 ÷ 6 = '+L('m')])},
+  {mod:'fc',p:withSub(G.e_twop({l:'k',k:4,x:5,c:2.8,noeq:1}),'第二组 (3) 如果 '+L('r')+' = 4'+L('k')+' + 2.8，当 '+L('r')+' = 22.8 时，'+L('k')+' 等于多少？',L('r')+' = 22.8','4'+L('k')+' + 2.8 = 22.8',['4 + 2.8 = 22.8'+L('k'),'22.8'+L('k')+' + 2.8 = 4','4'+L('k')+' − 2.8 = 22.8'])},
+  {mod:'fc',p:withSub(G.e_mbra({l:'b',k:4,op:'+',c:9,x:15,noeq:1}),'第二组 (4) 如果 '+L('a')+' = 4(9 + '+L('b')+')，当 '+L('a')+' = 96 时，'+L('b')+' 等于多少？',L('a')+' = 96','4(9 + '+L('b')+') = 96',['4 × 9 + '+L('b')+' = 96','96(9 + '+L('b')+') = 4','4(9 − '+L('b')+') = 96'])},
+  {mod:'fc',p:withSub(G.e_rdiv({l:'y',c:63.2,k:5,s:3.2,noeq:1}),'第二组 (5) 如果 '+L('z')+' = 63.2 ÷ 5'+L('y')+'，当 '+L('z')+' = 3.2 时，'+L('y')+' 等于多少？',L('z')+' = 3.2','63.2 ÷ 5'+L('y')+' = 3.2',['3.2 ÷ 5'+L('y')+' = 63.2','63.2 × 5'+L('y')+' = 3.2','63.2 ÷ 5 = 3.2'+L('y')])}
+]}
+function setPat(){return [
+  {mod:'gl',p:G.p_table({mode:'side',asks:[],q:'T3 第1题 方法①：一张桌子坐8人，桌子并排摆。摆 '+L('n')+' 张桌子时，能坐多少人？'})},
+  {mod:'gl',p:G.p_table({mode:'row',asks:[],q:'T3 第1题 方法②：一张桌子坐8人，桌子连成一长条。摆 '+L('n')+' 张桌子时，能坐多少人？'})},
+  {mod:'gl',p:G.p_hexseat({asks:[{t:'N',N:5},{t:'N',N:8}],q:'T3 第2题：实验桌这样摆，1张坐12人，2张坐20人。(1) 5张桌子可以坐几人？摆 '+L('n')+' 张桌子坐了 '+L('m')+' 人，用式子表示 '+L('n')+' 和 '+L('m')+' 的关系。(2) 8张桌子可以坐多少人？'})},
+  {mod:'gl',p:G.p_chain({k:3,asks:[],wrong:['3n','3n − 1','2n + 3'],q:'T4 第1题：摆1个三角形要3根小棒，摆2个要5根。摆 '+L('n')+' 个三角形要几根小棒？（A. 3n　B. 3n − 1　C. 2n + 1　D. 2n + 3）'})},
+  {mod:'gl',p:G.p_chain({k:5,asks:[],q:'T4 第2题：按下面的方式用小棒摆五边形，第 '+L('n')+' 个图形需要几根小棒？（课本上的五边形是正五边形，规律一样）'})},
+  {mod:'gl',p:G.p_fish({asks:[{t:'N',N:6},{t:'TM',T:2026}],q:'T4 第3题：用火柴棒摆"金鱼"。(1) 摆6条需要几根？(2) 摆 '+L('n')+' 条需要几根？(3) 有2026根火柴棒，可以摆多少条？'})}
+]}
 function weekendSet(){return [
   {mod:'fc',p:G.e_sub({l:'b',x:26.7,p:17.8,q:'(1) 如果 '+L('a')+' = '+L('b')+' − 17.8，当 '+L('a')+' = 8.9 时，'+L('b')+' 等于多少？',eq:'8.9 = '+L('b')+' − 17.8，也就是 '+L('b')+' − 17.8 = 8.9',pre:[{k:'n',p:'先把 '+L('a')+' = 8.9 放进去：'+L('b')+' − 17.8 = ',pre:'',a:8.9,h:'a 换成 8.9'}]})},
   {mod:'fc',p:G.e_div({l:'x',k:3.5,s:0.9,q:'(2) 如果 '+L('y')+' = '+L('x')+' ÷ 3.5，当 '+L('y')+' = 0.9 时，'+L('x')+' 等于多少？',eq:L('x')+' ÷ 3.5 = 0.9'})},
@@ -328,8 +430,8 @@ function weekendSet(){return [
   {mod:'dr',p:G.s_mmn({m:12,n:9})},
   {mod:'dr',p:G.s_e2d({e:4.2,d:2.8})},
   {mod:'dr',p:G.s_kxy({k:0.8,x:3,y:4})},
-  {mod:'gl',p:G.p_chain({k:6,N:10,ask:'N'})},
-  {mod:'gl',p:G.p_dots({arms:3,N:8,T:58,ask:'T'})}
+  {mod:'gl',p:G.p_chain({k:6,asks:[{t:'N',N:10}],q:'三 (1) 根据六边形的排列规律，摆10个六边形需要几根小棒？摆 '+L('n')+' 个需要几根？'})},
+  {mod:'gl',p:G.p_dots({arms:3,asks:[{t:'N',N:8},{t:'T',T:58}],q:'三 (2) 观察点子图，第8幅有几个点？第 '+L('n')+' 幅有几个点？点子总数是58时，'+L('n')+' 等于几？'})}
 ]}
 
 /* ================= 存档 ================= */
@@ -355,7 +457,10 @@ function homeHTML(){
   Object.keys(MODS).forEach(function(id,i){var m=MODS[id],s=modState(id);
     var badge=s.done?(isDue(id)?'<span class="badge due">该复习了</span>':'<span class="badge done">✓ 学会了</span>'):(s.stage0?'<span class="badge">学到一半</span>':'<span class="badge">还没学</span>');
     h+='<button class="mod" data-mod="'+id+'"><span class="ic">'+m.ic+'</span><span><b>'+(i+1)+'. '+m.name+'</b><small>'+m.short+'</small></span>'+badge+'</button>'});
-  h+='</section><section class="card"><h2>老师的周末小练 1</h2><p class="sub">三个单元都学完再做。每道题都会一步一步带着做。</p><button class="btn ghost" data-act="weekend">开始做周末小练（10题）</button></section>';
+  h+='</section><section class="card"><h2>老师发的练习</h2><p class="sub">先在纸上自己做，做完再来这里一步一步对照，找到自己错在哪一步。</p>'+
+    '<button class="btn ghost" data-act="weekend">周末小练 1（10题）</button>'+
+    '<button class="btn ghost" data-act="tset2">练习：用式子表示规律（6题）</button>'+
+    '<button class="btn ghost" data-act="tset3">练习：等式的性质（10题）</button></section>';
   h+='<p class="tip"><b>家长看这里：</b>每个单元最后有「说一说」，请听孩子讲一遍，能讲清楚才算学会。讲不清楚的地方，回到「想一想」再看一遍。</p>';
   return h;
 }
@@ -365,7 +470,7 @@ var STG=['想一想','看例题','跟着做','自己做','说一说'];
 function openMod(id){var m=MODS[id];
   V={view:'mod',id:id,stage:0,card:0,ex:1,
     guided:m.guided.map(function(g){return {g:g,p:G[g](),cur:0,tries:0,log:[]}}),gi:0,
-    solo:shuffle(m.solo).map(function(g){return {g:g,p:G[g](),val:'',res:null,helped:false,cur:0,tries:0,log:[]}}),si:0};
+    solo:shuffle(m.solo).slice(0,m.soloN||5).map(function(g){return {g:g,p:G[g](),val:'',res:null,helped:false,cur:0,tries:0,log:[]}}),si:0};
   S.mods[id]=S.mods[id]||{};S.mods[id].stage0=true;save();render();window.scrollTo(0,0)}
 function stagesBar(){return '<div class="stages">'+STG.map(function(s,i){return '<div class="stg'+(i===V.stage?' on':i<V.stage?' past':'')+'">'+(i+1)+' '+s+'</div>'}).join('')+'</div>'}
 function modHTML(){var m=MODS[V.id];
@@ -481,6 +586,8 @@ app.addEventListener('click',function(e){
   else if(act==='relearn'){V.stage=0;V.card=0;render();window.scrollTo(0,0)}
   else if(act==='finish'){var m=S.mods[V.id]=S.mods[V.id]||{};if(!m.done){m.done=true;m.stage=0}m.last=today();save();toast('完成！过几天会提醒你复习。');go({view:'home'})}
   else if(act==='review'){var it=reviewItems();if(!it.length){toast('今天没有要复习的');return}openSet('复习 · 换个数字再做',it)}
+  else if(act==='tset2'){openSet('练习：用式子表示规律',setPat().map(function(x){return {mod:x.mod,p:x.p,mode:'guided'}}))}
+  else if(act==='tset3'){openSet('练习：等式的性质',setEq().map(function(x){return {mod:x.mod,p:x.p,mode:'guided'}}))}
   else if(act==='weekend'){openSet('老师的周末小练 1',weekendSet().map(function(x){return {mod:x.mod,p:x.p,mode:'guided'}}))}
 });
 function afterStep(pfx){
